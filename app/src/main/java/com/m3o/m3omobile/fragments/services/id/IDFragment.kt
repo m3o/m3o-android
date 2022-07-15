@@ -76,12 +76,15 @@ class IDFragment : Fragment() {
                     IDType.XID
                 }
                 binding.radio5.id -> {
-                    IDType.ShortID
+                    IDType.NANOID
                 }
                 binding.radio6.id -> {
-                    IDType.Snowflake
+                    IDType.ShortID
                 }
                 binding.radio7.id -> {
+                    IDType.Snowflake
+                }
+                binding.radio8.id -> {
                     IDType.Bigflake
                 }
                 else -> null
@@ -126,6 +129,7 @@ class IDFragment : Fragment() {
         ULID("ulid"),
         KSUID("ksuid"),
         XID("xid"),
+        NANOID("nanoid"),
         ShortID("shortid"),
         Snowflake("snowflake"),
         Bigflake("bigflake")

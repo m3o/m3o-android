@@ -66,16 +66,22 @@
                 android:id="@+id/radio_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Short ID" />
+                android:text="Nano ID" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Snowflake (64 Bit)" />
+                android:text="Short ID" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Snowflake (64 Bit)" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bigflake (128 Bit)" />
