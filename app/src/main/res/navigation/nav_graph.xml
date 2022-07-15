@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ServicesFragment">
+
+    <fragment
+        android:id="@+id/ServicesFragment"
+        android:name="com.m3o.m3omobile.fragments.services.ServicesFragment"
+        tools:layout="@layout/fragment_services"
+        android:label="M3O Services" />
+
+    <fragment
+        android:id="@+id/AccountFragment"
+        android:name="com.m3o.m3omobile.fragments.AccountFragment"
+        tools:layout="@layout/fragment_account"
+        android:label="Your Account" />
+
+    <fragment
+        android:id="@+id/AvatarFragment"
+        android:name="com.m3o.m3omobile.fragments.services.avatar.AvatarFragment"
+        tools:layout="@layout/fragment_service_avatar"
+        android:label="Avatar" />
+
+    <fragment
+        android:id="@+id/BitcoinFragment"
+        android:name="com.m3o.m3omobile.fragments.services.bitcoin.BitcoinFragment"
+        tools:layout="@layout/fragment_service_bitcoin"
+        android:label="Bitcoin" />
+
+    <fragment
+        android:id="@+id/GIFsFragment"
+        android:name="com.m3o.m3omobile.fragments.services.gifs.GIFsFragment"
+        tools:layout="@layout/fragment_service_gifs"
+        android:label="GIFs" />
+
+    <fragment
+        android:id="@+id/IP"
+        android:name="com.m3o.m3omobile.fragments.services.ip.IPGeolocationFragment"
+        tools:layout="@layout/fragment_service_ip_geolocation"
+        android:label="IP Geolocation" />
+
+    <fragment
+        android:id="@+id/JokesFragment"
+        android:name="com.m3o.m3omobile.fragments.services.jokes.JokesFragment"
+        tools:layout="@layout/fragment_service_jokes"
+        android:label="Jokes" />
+
+    <fragment
+        android:id="@+id/PasswordsFragment"
+        android:name="com.m3o.m3omobile.fragments.services.passwords.PasswordsFragment"
+        tools:layout="@layout/fragment_service_passwords"
+        android:label="Passwords" />
+
+    <fragment
+        android:id="@+id/URLsFragment"
+        android:name="com.m3o.m3omobile.fragments.services.urls.URLsFragment"
+        tools:layout="@layout/fragment_service_urls"
+        android:label="URLs" />
+
+</navigation>

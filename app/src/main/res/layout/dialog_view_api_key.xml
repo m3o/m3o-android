@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/input_field"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dialog_frame_margin_horizontal"
+    android:paddingEnd="@dimen/dialog_frame_margin_horizontal"
+    android:paddingTop="@dimen/dialog_frame_margin_vertical">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/input_field_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"
+        android:autofillHints="password"
+        android:inputType="textPassword"
+        android:hint="API Key" />
+
+</com.google.android.material.textfield.TextInputLayout>
