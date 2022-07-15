@@ -36,6 +36,12 @@
         android:label="GIFs" />
 
     <fragment
+        android:id="@+id/IDFragment"
+        android:name="com.m3o.m3omobile.fragments.services.id.IDFragment"
+        tools:layout="@layout/fragment_service_id"
+        android:label="ID" />
+
+    <fragment
         android:id="@+id/IP"
         android:name="com.m3o.m3omobile.fragments.services.ip.IPGeolocationFragment"
         tools:layout="@layout/fragment_service_ip_geolocation"
