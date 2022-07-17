@@ -60,7 +60,8 @@ class GIFsFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         val data = GIFsService.search(search, 20).data
-                        binding.recycler.adapter = GIFsAdapter(myContext, data) { gif, _ ->
+                        if (data != null) {
+                            binding.recycler.adapter = GIFsAdapter(myContext, data) { gif, _ ->
 //                            val file = cacheAvatar(gif)
 //                            val uri = FileProvider.getUriForFile(
 //                                myContext,
@@ -86,6 +87,7 @@ class GIFsFragment : Fragment() {
 //                                )
 //                            }
 //                            startActivity(chooser)
+                            }
                         }
                         binding.progressBar.visibility = View.GONE
                     } catch (e: Exception) {

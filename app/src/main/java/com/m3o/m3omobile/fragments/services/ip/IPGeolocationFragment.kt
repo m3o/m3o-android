@@ -58,7 +58,7 @@ class IPGeolocationFragment : Fragment() {
                             output.add("ASN" to data.asn.toString())
                         }
                         if (data.city != null) {
-                            output.add("City" to data.city)
+                            output.add("City" to data.city!!)
                         }
                         output.add("Country" to data.country)
                         output.add("Timezone" to data.timezone)
