@@ -9,7 +9,7 @@
         android:id="@+id/ServicesFragment"
         android:name="com.m3o.m3omobile.fragments.services.ServicesFragment"
         tools:layout="@layout/fragment_services"
-        android:label="M3O Services" />
+        android:label="Services" />
 
     <fragment
         android:id="@+id/AccountFragment"
