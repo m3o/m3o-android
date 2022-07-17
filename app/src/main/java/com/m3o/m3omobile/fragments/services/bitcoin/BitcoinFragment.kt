@@ -55,7 +55,7 @@ class BitcoinFragment : Fragment() {
                 }
             }
         } catch (e: Exception) {
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.INVISIBLE
             MaterialAlertDialogBuilder(myContext)
                 .setTitle("Error")
                 .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
@@ -75,7 +75,7 @@ class BitcoinFragment : Fragment() {
                     .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
                     .show()
             }
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.INVISIBLE
         }
     }
 

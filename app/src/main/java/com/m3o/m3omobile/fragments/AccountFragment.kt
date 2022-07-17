@@ -56,9 +56,9 @@ class AccountFragment : Fragment() {
                     Networking.initializeAuth(Safe.getAndDecryptAccessToken(myContext))
                     val balance = AccountService.balance(Safe.getAndDecryptUserId(myContext))
                     binding.balanceView.text = (balance.currentBalance.toFloat() / 1000000).toString()
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.INVISIBLE
                 } catch (e: Exception) {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.INVISIBLE
                     MaterialAlertDialogBuilder(myContext)
                         .setTitle("Error")
                         .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
@@ -82,7 +82,7 @@ class AccountFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_SECURE
                     )
                     setApiCardClickListener(apiCardClickShownListener)
-                    binding.keyViewHidden.visibility = View.GONE
+                    binding.keyViewHidden.visibility = View.INVISIBLE
                     binding.keyView.visibility = View.VISIBLE
                     binding.keyView.text = Safe.getAndDecryptApiKey(myContext)
 
@@ -138,7 +138,7 @@ class AccountFragment : Fragment() {
     private fun resetApiCard() {
         if (_binding != null) {
             binding.keyViewHidden.visibility = View.VISIBLE
-            binding.keyView.visibility = View.GONE
+            binding.keyView.visibility = View.INVISIBLE
             binding.timerView.text = ""
             binding.keyView.text = ""
             setApiCardClickListener()

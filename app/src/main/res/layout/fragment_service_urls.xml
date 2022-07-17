@@ -14,7 +14,7 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="32dp"
+        android:paddingBottom="64dp"
         android:clipToPadding="false" />
 
 </LinearLayout>

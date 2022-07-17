@@ -63,8 +63,8 @@ class AvatarFragment : Fragment() {
                 closeKeyboard(myContext)
                 binding.progressBar.visibility = View.VISIBLE
                 binding.avatarView.setImageDrawable(getServiceIcon(myContext, getSvg()))
-                binding.saveButton.visibility = View.GONE
-                binding.shareButton.visibility = View.GONE
+                binding.saveButton.visibility = View.INVISIBLE
+                binding.shareButton.visibility = View.INVISIBLE
                 if (!M3O.isInitialized()) {
                     M3O.initialize(Safe.getAndDecryptApiKey(myContext))
                 }
@@ -93,9 +93,9 @@ class AvatarFragment : Fragment() {
                         binding.avatarView.setImageBitmap(avatar)
                         binding.saveButton.visibility = View.VISIBLE
                         binding.shareButton.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
+                        binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
-                        binding.progressBar.visibility = View.GONE
+                        binding.progressBar.visibility = View.INVISIBLE
                         MaterialAlertDialogBuilder(myContext)
                             .setTitle("Error")
                             .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))

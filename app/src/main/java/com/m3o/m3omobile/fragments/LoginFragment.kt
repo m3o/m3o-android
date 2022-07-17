@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
                     Log.d("M3O Mobile", "API key stored")
                     startActivity(Intent(myContext, MainActivity::class.java))
                 } catch (e: Exception) {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.INVISIBLE
                     binding.submitButton.isEnabled = true
                     binding.apiKeyButton.isEnabled = true
                     MaterialAlertDialogBuilder(myContext)
