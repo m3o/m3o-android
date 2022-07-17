@@ -51,18 +51,20 @@ class PasswordsFragment : Fragment() {
 
         binding.resultButton.apply {
             setOnClickListener {
+                text = generate(
+                    binding.lengthSlider.value.toInt(),
+                    binding.lowercaseSwitch.isChecked,
+                    binding.uppercaseSwitch.isChecked,
+                    binding.numbersSwitch.isChecked,
+                    binding.specialSwitch.isChecked
+                )
+            }
+            setOnLongClickListener {
                 if (text != "Generate") {
                     storeToClipboard("Password", text.toString())
                     showToast("Copied to clipboard")
-                } else {
-                    text = generate(
-                        binding.lengthSlider.value.toInt(),
-                        binding.lowercaseSwitch.isChecked,
-                        binding.uppercaseSwitch.isChecked,
-                        binding.numbersSwitch.isChecked,
-                        binding.specialSwitch.isChecked
-                    )
-                }
+                    true
+                } else false
             }
         }
 
