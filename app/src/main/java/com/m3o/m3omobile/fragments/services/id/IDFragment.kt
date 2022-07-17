@@ -38,7 +38,7 @@ class IDFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.radioGroup.setOnCheckedChangeListener { _, i ->
+        binding.radioGroup.setOnCheckedChangeListener { _, _ ->
             binding.resultButton.text = "Generate"
         }
 

@@ -42,7 +42,7 @@
         android:label="ID" />
 
     <fragment
-        android:id="@+id/IP"
+        android:id="@+id/IPGeolocationFragment"
         android:name="com.m3o.m3omobile.fragments.services.ip.IPGeolocationFragment"
         tools:layout="@layout/fragment_service_ip_geolocation"
         android:label="IP Geolocation" />

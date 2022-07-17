@@ -57,7 +57,7 @@ class ServicesFragment : Fragment() {
             "bitcoin" -> findNavController().navigate(R.id.BitcoinFragment)
             "gifs" -> findNavController().navigate(R.id.GIFsFragment)
             "id" -> findNavController().navigate(R.id.IDFragment)
-            "ip_geolocation" -> findNavController().navigate(R.id.IP)
+            "ip_geolocation" -> findNavController().navigate(R.id.IPGeolocationFragment)
             "jokes" -> findNavController().navigate(R.id.JokesFragment)
             "passwords" -> findNavController().navigate(R.id.PasswordsFragment)
             "urls" -> findNavController().navigate(R.id.URLsFragment)

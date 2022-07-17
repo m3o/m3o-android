@@ -65,9 +65,16 @@ class BitcoinFragment : Fragment() {
 
     private fun fetchData() {
         lifecycleScope.launch {
-            val data = BitcoinService.price().price
-            @SuppressLint("SetTextI18n")
-            binding.priceView.text = "$data $"
+            try {
+                val data = BitcoinService.price().price
+                @SuppressLint("SetTextI18n")
+                binding.priceView.text = "$data $"
+            } catch (e: Exception) {
+                MaterialAlertDialogBuilder(myContext)
+                    .setTitle("Error")
+                    .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
+                    .show()
+            }
             binding.progressBar.visibility = View.GONE
         }
     }
