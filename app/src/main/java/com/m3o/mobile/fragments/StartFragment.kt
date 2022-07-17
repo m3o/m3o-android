@@ -1,5 +1,7 @@
 package com.m3o.mobile.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +33,11 @@ class StartFragment : Fragment() {
 
         binding.loginButton.setOnClickListener {
             findNavController().navigate(R.id.LoginFragment)
+        }
+
+        binding.registerButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://m3o.com/register"))
+            startActivity(intent)
         }
     }
 
