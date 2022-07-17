@@ -24,11 +24,11 @@
 -dontnote kotlinx.serialization.AnnotationsKt
 -dontnote kotlinx.serialization.SerializationKt
 
--keep,includedescriptorclasses class com.m3o.m3omobile.**$$serializer { *; }
--keepclassmembers class com.m3o.m3omobile.** {
+-keep,includedescriptorclasses class com.m3o.mobile.**$$serializer { *; }
+-keepclassmembers class com.m3o.mobile.** {
     *** Companion;
 }
--keepclasseswithmembers class com.m3o.m3omobile.** {
+-keepclasseswithmembers class com.m3o.mobile.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 

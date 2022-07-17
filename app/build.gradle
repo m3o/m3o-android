@@ -21,7 +21,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.m3o.m3omobile"
+        applicationId "com.m3o.mobile"
         minSdk 16
         targetSdk 32
         versionCode 1

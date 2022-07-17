@@ -7,61 +7,61 @@
 
     <fragment
         android:id="@+id/ServicesFragment"
-        android:name="com.m3o.m3omobile.fragments.services.ServicesFragment"
+        android:name="com.m3o.mobile.fragments.services.ServicesFragment"
         tools:layout="@layout/fragment_services"
         android:label="Services" />
 
     <fragment
         android:id="@+id/AccountFragment"
-        android:name="com.m3o.m3omobile.fragments.AccountFragment"
+        android:name="com.m3o.mobile.fragments.AccountFragment"
         tools:layout="@layout/fragment_account"
         android:label="Your Account" />
 
     <fragment
         android:id="@+id/AvatarFragment"
-        android:name="com.m3o.m3omobile.fragments.services.avatar.AvatarFragment"
+        android:name="com.m3o.mobile.fragments.services.avatar.AvatarFragment"
         tools:layout="@layout/fragment_service_avatar"
         android:label="Avatar" />
 
     <fragment
         android:id="@+id/BitcoinFragment"
-        android:name="com.m3o.m3omobile.fragments.services.bitcoin.BitcoinFragment"
+        android:name="com.m3o.mobile.fragments.services.bitcoin.BitcoinFragment"
         tools:layout="@layout/fragment_service_bitcoin"
         android:label="Bitcoin" />
 
     <fragment
         android:id="@+id/GIFsFragment"
-        android:name="com.m3o.m3omobile.fragments.services.gifs.GIFsFragment"
+        android:name="com.m3o.mobile.fragments.services.gifs.GIFsFragment"
         tools:layout="@layout/fragment_service_gifs"
         android:label="GIFs" />
 
     <fragment
         android:id="@+id/IDFragment"
-        android:name="com.m3o.m3omobile.fragments.services.id.IDFragment"
+        android:name="com.m3o.mobile.fragments.services.id.IDFragment"
         tools:layout="@layout/fragment_service_id"
         android:label="ID" />
 
     <fragment
         android:id="@+id/IPGeolocationFragment"
-        android:name="com.m3o.m3omobile.fragments.services.ip.IPGeolocationFragment"
+        android:name="com.m3o.mobile.fragments.services.ip.IPGeolocationFragment"
         tools:layout="@layout/fragment_service_ip_geolocation"
         android:label="IP Geolocation" />
 
     <fragment
         android:id="@+id/JokesFragment"
-        android:name="com.m3o.m3omobile.fragments.services.jokes.JokesFragment"
+        android:name="com.m3o.mobile.fragments.services.jokes.JokesFragment"
         tools:layout="@layout/fragment_service_jokes"
         android:label="Jokes" />
 
     <fragment
         android:id="@+id/PasswordsFragment"
-        android:name="com.m3o.m3omobile.fragments.services.passwords.PasswordsFragment"
+        android:name="com.m3o.mobile.fragments.services.passwords.PasswordsFragment"
         tools:layout="@layout/fragment_service_passwords"
         android:label="Passwords" />
 
     <fragment
         android:id="@+id/URLsFragment"
-        android:name="com.m3o.m3omobile.fragments.services.urls.URLsFragment"
+        android:name="com.m3o.mobile.fragments.services.urls.URLsFragment"
         tools:layout="@layout/fragment_service_urls"
         android:label="URLs" />
 

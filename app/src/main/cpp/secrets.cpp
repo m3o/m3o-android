@@ -65,7 +65,7 @@ jstring getOriginalKey(
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_m3o_m3omobile_utils_Secrets_getCipherPassword(
+Java_com_m3o_mobile_utils_Secrets_getCipherPassword(
         JNIEnv *pEnv,
         jobject pThis,
         jstring packageName) {
