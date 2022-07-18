@@ -33,6 +33,9 @@ internal data class CreateKeyResponse(
     val apiKeyId: String
 )
 
+@Serializable
+internal data class RefreshRequest(@SerialName("refresh_token") val refreshToken: String)
+
 object LoginService {
 
     internal suspend fun createKey(
@@ -47,6 +50,12 @@ object LoginService {
     internal suspend fun login(email: String, password: String): LoginResponse {
         return ktorHttpClient.post(getUrl("customers/login")) {
             body = LoginRequest(email, password)
+        }
+    }
+
+    internal suspend fun refresh(refreshToken: String) {
+        return ktorHttpAuthClient.post(getUrl("customers/login")) {
+            body = RefreshRequest(refreshToken)
         }
     }
 }

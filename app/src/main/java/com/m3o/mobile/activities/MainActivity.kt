@@ -3,10 +3,12 @@ package com.m3o.mobile.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,8 +16,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.m3o.mobile.R
+import com.m3o.mobile.api.LoginService
+import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.ActivityMainBinding
+import com.m3o.mobile.utils.REFRESH_TOKEN
+import com.m3o.mobile.utils.SKIP_REFRESH
 import com.m3o.mobile.utils.Safe
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var skipRefreshAndClickListener = false
         if (Safe.getAndDecryptApiKey(applicationContext).isEmpty()) {
+            skipRefreshAndClickListener = true
             finish()
             startActivity(Intent(applicationContext, StartActivity::class.java))
         }
@@ -44,9 +53,24 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        binding.fab.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/vhBuhvYJtG"))
-            startActivity(intent)
+        if (!skipRefreshAndClickListener) {
+            binding.fab.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/vhBuhvYJtG"))
+                startActivity(intent)
+            }
+
+            if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {
+                Networking.initializeAuth(Safe.getAndDecryptAccessToken(applicationContext))
+                lifecycleScope.launch {
+                    try {
+                        LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))
+                        Log.d("M3O-Mobile", "Access token refreshed")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.d("M3O-Mobile", "Refreshing access token failed")
+                    }
+                }
+            }
         }
     }
 

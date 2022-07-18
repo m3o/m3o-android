@@ -18,7 +18,9 @@ import javax.crypto.spec.SecretKeySpec
 internal const val ACCESS_TOKEN = "access_token"
 internal const val API_KEY = "key"
 internal const val EMAIL = "email"
+internal const val REFRESH_TOKEN = "refresh_token"
 internal const val SHARED_PREFERENCE = "Safe"
+internal const val SKIP_REFRESH = "skip_refresh"
 internal const val USER_ID = "user_id"
 
 internal fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
@@ -72,6 +74,22 @@ internal object Safe {
     private const val HASH_ALGORITHM = "SHA-256"
     private const val IV_LENGTH = 16
 
+    internal fun storeKey(
+        context: Context,
+        label: String,
+        content: String
+    ) {
+        context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
+            .edit()
+            .putString(label, content)
+            .apply()
+    }
+
+    internal fun getKey(context: Context, label: String): String {
+        return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
+            .getString(label, "")!!
+    }
+
     internal fun encryptAndStoreAccessToken(context: Context, accessToken: String) {
         encryptAndStore(context, ACCESS_TOKEN, accessToken)
     }
@@ -89,8 +107,6 @@ internal object Safe {
         preference: String,
         value: String
     ) {
-        val editor = context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE).edit()
-
         if (value != "") {
             try {
                 val secretKey = generateKey(Secrets.getCipherPassword())
@@ -98,12 +114,12 @@ internal object Safe {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(ByteArray(IV_LENGTH)))
                 val encryptedValue = cipher.doFinal(value.toByteArray(Charsets.UTF_8))
                 val encryptedApiKey = Base64.encodeToString(encryptedValue, Base64.DEFAULT)
-                editor.putString(preference, encryptedApiKey).commit()
+                storeKey(context, preference, encryptedApiKey)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         } else {
-            editor.putString(preference, "").commit()
+            storeKey(context, preference, "")
         }
     }
 

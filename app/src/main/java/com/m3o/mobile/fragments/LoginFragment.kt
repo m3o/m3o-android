@@ -2,7 +2,6 @@ package com.m3o.mobile.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -23,7 +22,8 @@ import com.m3o.mobile.api.LoginService
 import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.FragmentLoginBinding
 import com.m3o.mobile.utils.EMAIL
-import com.m3o.mobile.utils.SHARED_PREFERENCE
+import com.m3o.mobile.utils.REFRESH_TOKEN
+import com.m3o.mobile.utils.SKIP_REFRESH
 import com.m3o.mobile.utils.Safe
 import kotlinx.coroutines.launch
 
@@ -56,23 +56,33 @@ class LoginFragment : Fragment() {
             val password = binding.passwordInputText.text.toString()
             lifecycleScope.launch {
                 try {
-                    val accessToken = LoginService.login(email, password).token.accessToken
+                    val token = LoginService.login(email, password).token
+                    val accessToken = token.accessToken
+                    val refreshToken = token.refreshToken
+                    println(refreshToken)
+                    println(accessToken)
                     Log.d("M3O Mobile", "Log in complete")
-                    myContext.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
-                        .edit()
-                        .putString(EMAIL, email)
-                        .apply()
+
+                    Safe.storeKey(myContext, EMAIL, email)
                     Log.d("M3O Mobile", "Email stored")
+
                     Safe.encryptAndStoreAccessToken(myContext, accessToken)
-                    Log.d("M3O Mobile", "Access token stored")
+                    Safe.storeKey(myContext, REFRESH_TOKEN, refreshToken)
+                    Log.d("M3O Mobile", "Access and refresh tokens stored")
+
                     Networking.initializeAuth(accessToken)
                     val userId = AccountService.read(email, password).customer.id
                     Safe.encryptAndStoreUserId(myContext, userId)
                     Log.d("M3O Mobile", "User Id stored")
+
                     val apiKey = LoginService.createKey().apiKey
                     Safe.encryptAndStoreApiKey(myContext, apiKey)
                     Log.d("M3O Mobile", "API key stored")
-                    startActivity(Intent(myContext, MainActivity::class.java))
+
+                    val intent = Intent(myContext, MainActivity::class.java).apply {
+                        putExtra(SKIP_REFRESH, true)
+                    }
+                    startActivity(intent)
                 } catch (e: Exception) {
                     binding.progressBar.visibility = View.INVISIBLE
                     binding.submitButton.isEnabled = true
