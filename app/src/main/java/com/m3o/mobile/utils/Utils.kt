@@ -1,14 +1,15 @@
 package com.m3o.mobile.utils
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import android.util.Base64
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import java.security.MessageDigest
 import javax.crypto.Cipher
@@ -41,6 +42,18 @@ internal fun Fragment.storeToClipboard(label: String, text: String) {
     requireContext().storeToClipboard(label, text)
 }
 
+internal fun Fragment.hideKeyboard() {
+    val activity = requireActivity()
+    val imm = activity.getSystemService(
+        AppCompatActivity.INPUT_METHOD_SERVICE
+    ) as InputMethodManager
+    var view = activity.currentFocus
+    if (view == null) {
+        view = View(activity)
+    }
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
 internal fun getServiceIcon(
     context: Context,
     svgPath: String
@@ -59,14 +72,6 @@ internal fun getServiceIcon(
         Color.parseColor("#F687B3") // pink-400
     ))
 )
-
-internal fun closeKeyboard(context: Context) {
-    val view = (context as Activity).currentFocus
-    if (view != null) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-}
 
 internal object Safe {
     private const val CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding"

@@ -17,7 +17,7 @@ import com.cyb3rko.m3okotlin.services.GIFsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceGifsBinding
 import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.closeKeyboard
+import com.m3o.mobile.utils.hideKeyboard
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -50,7 +50,7 @@ class GIFsFragment : Fragment() {
 
         binding.gifSearchInputText.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
-                closeKeyboard(myContext)
+                hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
                 if (!M3O.isInitialized()) {
                     M3O.initialize(Safe.getAndDecryptApiKey(myContext))

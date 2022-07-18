@@ -26,7 +26,7 @@ import com.cyb3rko.m3okotlin.services.AvatarService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceAvatarBinding
 import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.closeKeyboard
+import com.m3o.mobile.utils.hideKeyboard
 import com.m3o.mobile.utils.getServiceIcon
 import kotlinx.coroutines.launch
 import java.io.File
@@ -60,7 +60,7 @@ class AvatarFragment : Fragment() {
 
         binding.usernameInputText.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
-                closeKeyboard(myContext)
+                hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
                 binding.avatarView.setImageDrawable(getServiceIcon(myContext, getSvg()))
                 binding.saveButton.visibility = View.INVISIBLE

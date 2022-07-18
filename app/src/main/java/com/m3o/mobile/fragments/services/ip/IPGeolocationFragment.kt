@@ -17,7 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceIpGeolocationBinding
 import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.closeKeyboard
+import com.m3o.mobile.utils.hideKeyboard
 import kotlinx.coroutines.launch
 
 class IPGeolocationFragment : Fragment() {
@@ -43,7 +43,7 @@ class IPGeolocationFragment : Fragment() {
 
         binding.ipAddressInputText.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
-                closeKeyboard(myContext)
+                hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
                 if (!M3O.isInitialized()) {
                     M3O.initialize(Safe.getAndDecryptApiKey(myContext))
