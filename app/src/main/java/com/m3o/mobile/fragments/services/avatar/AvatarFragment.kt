@@ -11,23 +11,18 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.text.Html
 import android.util.Base64
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.AvatarService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceAvatarBinding
-import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.hideKeyboard
-import com.m3o.mobile.utils.getServiceIcon
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -96,10 +91,7 @@ class AvatarFragment : Fragment() {
                         binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
                         binding.progressBar.visibility = View.INVISIBLE
-                        MaterialAlertDialogBuilder(myContext)
-                            .setTitle("Error")
-                            .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                            .show()
+                        showErrorDialog(e.message)
                     }
                 }
                 return@OnKeyListener true
@@ -186,7 +178,7 @@ class AvatarFragment : Fragment() {
             out.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(myContext, "Sharing avatar failed", Toast.LENGTH_SHORT).show()
+            showToast("Sharing avatar failed")
         }
         return file
     }
@@ -226,10 +218,10 @@ class AvatarFragment : Fragment() {
             try {
                 avatar.compress(format, 100, out)
                 out.close()
-                Toast.makeText(myContext, "Avatar saved to Gallery", Toast.LENGTH_SHORT).show()
+                showToast("Avatar saved to gallery")
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(myContext, "Saving avatar failed", Toast.LENGTH_SHORT).show()
+                showToast("Saving avatar failed")
             }
         }
     }

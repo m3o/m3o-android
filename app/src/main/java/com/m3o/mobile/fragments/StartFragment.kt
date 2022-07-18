@@ -1,7 +1,5 @@
 package com.m3o.mobile.fragments
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentStartBinding
+import com.m3o.mobile.utils.openUrl
 
 class StartFragment : Fragment() {
 
@@ -36,8 +35,7 @@ class StartFragment : Fragment() {
         }
 
         binding.registerButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://m3o.com/register"))
-            startActivity(intent)
+            openUrl("https://m3o.com/register")
         }
     }
 

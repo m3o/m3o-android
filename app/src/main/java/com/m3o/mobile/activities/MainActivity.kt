@@ -1,7 +1,6 @@
 package com.m3o.mobile.activities
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -22,6 +21,7 @@ import com.m3o.mobile.databinding.ActivityMainBinding
 import com.m3o.mobile.utils.REFRESH_TOKEN
 import com.m3o.mobile.utils.SKIP_REFRESH
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.openUrl
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -55,8 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         if (!skipRefreshAndClickListener) {
             binding.fab.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/vhBuhvYJtG"))
-                startActivity(intent)
+                openUrl("https://discord.gg/vhBuhvYJtG")
             }
 
             if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,8 +42,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val email = myContext.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE)
-            .getString(EMAIL, "")!!
+        val email = Safe.getKey(myContext, EMAIL)
 
         if (email.isNotEmpty()) {
             binding.emailView.text = email
@@ -59,10 +57,7 @@ class AccountFragment : Fragment() {
                     binding.progressBar.visibility = View.INVISIBLE
                 } catch (e: Exception) {
                     binding.progressBar.visibility = View.INVISIBLE
-                    MaterialAlertDialogBuilder(myContext)
-                        .setTitle("Error")
-                        .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                        .show()
+                    showErrorDialog(e.message)
                 }
             }
         }
@@ -119,10 +114,7 @@ class AccountFragment : Fragment() {
         binding.apiKeyCard.setOnClickListener(apiCardClickListener)
 
         binding.logoutButton.setOnClickListener {
-            myContext.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE)
-                .edit()
-                .putString(EMAIL, "")
-                .apply()
+            Safe.storeKey(myContext, EMAIL, "")
             Safe.encryptAndStoreAccessToken(myContext, "")
             Safe.encryptAndStoreUserId(myContext, "")
             Safe.encryptAndStoreApiKey(myContext, "")

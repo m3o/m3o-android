@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -22,10 +21,7 @@ import com.m3o.mobile.api.AccountService
 import com.m3o.mobile.api.LoginService
 import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.FragmentLoginBinding
-import com.m3o.mobile.utils.EMAIL
-import com.m3o.mobile.utils.REFRESH_TOKEN
-import com.m3o.mobile.utils.SKIP_REFRESH
-import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -101,10 +97,7 @@ class LoginFragment : Fragment() {
                     binding.progressBar.visibility = View.INVISIBLE
                     binding.submitButton.isEnabled = true
                     binding.apiKeyButton.isEnabled = true
-                    MaterialAlertDialogBuilder(myContext)
-                        .setTitle("Error")
-                        .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                        .show()
+                    showErrorDialog(e.message)
                 }
             }
         }

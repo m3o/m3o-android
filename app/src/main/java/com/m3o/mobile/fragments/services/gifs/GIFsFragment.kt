@@ -2,22 +2,21 @@ package com.m3o.mobile.fragments.services.gifs
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Html
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.GIFsService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceGifsBinding
 import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.hideKeyboard
+import com.m3o.mobile.utils.showErrorDialog
+import com.m3o.mobile.utils.showToast
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -92,10 +91,7 @@ class GIFsFragment : Fragment() {
                         binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
                         binding.progressBar.visibility = View.INVISIBLE
-                        MaterialAlertDialogBuilder(myContext)
-                            .setTitle("Error")
-                            .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                            .show()
+                        showErrorDialog(e.message)
                     }
                 }
 
@@ -122,7 +118,7 @@ class GIFsFragment : Fragment() {
             out.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(myContext, "Sharing GIF failed", Toast.LENGTH_SHORT).show()
+            showToast("Sharing GIF failed")
         }
         return file
     }

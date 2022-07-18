@@ -2,7 +2,6 @@ package com.m3o.mobile.fragments.services.id
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.IDService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceIdBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.showErrorDialog
 import com.m3o.mobile.utils.showToast
 import com.m3o.mobile.utils.storeToClipboard
 import kotlinx.coroutines.launch
@@ -96,27 +95,21 @@ class IDFragment : Fragment() {
                     if (idType.typeName == idResponse.type) {
                         binding.resultButton.text = idResponse.id
                     } else {
-                        showError()
+                        showErrorDialog()
                     }
                 } catch (e: Exception) {
-                    MaterialAlertDialogBuilder(myContext)
-                        .setTitle("Error")
-                        .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                        .show()
+                    showErrorDialog(e.message)
                 }
                 binding.progressBar.visibility = View.INVISIBLE
             } else {
                 binding.progressBar.visibility = View.INVISIBLE
-                showError()
+                showErrorDialog()
             }
         }
     }
 
-    private fun showError() {
-        MaterialAlertDialogBuilder(myContext)
-            .setTitle("Error")
-            .setMessage("ID generation failed")
-            .show()
+    private fun showErrorDialog() {
+        showErrorDialog("ID generation failed")
     }
 
     override fun onDestroyView() {

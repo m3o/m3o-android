@@ -4,13 +4,17 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
+import android.text.Html
 import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -42,6 +46,25 @@ internal fun Fragment.storeToClipboard(label: String, text: String) {
     requireContext().storeToClipboard(label, text)
 }
 
+internal fun Context.showDialog(title: String, message: CharSequence) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .show()
+}
+
+internal fun Fragment.showDialog(title: String, message: CharSequence) {
+    requireContext().showDialog(title, message)
+}
+
+internal fun Fragment.showErrorDialog(message: String?) {
+    showDialog(
+        "An Error Occured",
+        @Suppress("DEPRECATION")
+        Html.fromHtml("<b>Exception Message</b>:<br/>$message")
+    )
+}
+
 internal fun Fragment.hideKeyboard() {
     val activity = requireActivity()
     val imm = activity.getSystemService(
@@ -52,6 +75,15 @@ internal fun Fragment.hideKeyboard() {
         view = View(activity)
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+internal fun Context.openUrl(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(intent)
+}
+
+internal fun Fragment.openUrl(url: String) {
+    requireContext().openUrl(url)
 }
 
 internal fun getServiceIcon(

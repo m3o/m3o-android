@@ -2,7 +2,6 @@ package com.m3o.mobile.fragments.services.ip
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Html
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.IPGeolocationService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceIpGeolocationBinding
 import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.hideKeyboard
+import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
 class IPGeolocationFragment : Fragment() {
@@ -82,10 +81,7 @@ class IPGeolocationFragment : Fragment() {
                         binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
                         binding.progressBar.visibility = View.INVISIBLE
-                        MaterialAlertDialogBuilder(myContext)
-                            .setTitle("Error")
-                            .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                            .show()
+                        showErrorDialog(e.message)
                     }
                 }
                 return@setOnKeyListener true

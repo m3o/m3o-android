@@ -1,7 +1,6 @@
 package com.m3o.mobile.fragments.services.urls
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.m3o.mobile.R
+import com.m3o.mobile.utils.openUrl
 
 class URLsBottomSheet(
     private val shortURL: String,
@@ -23,12 +23,10 @@ class URLsBottomSheet(
         val view = inflater.inflate(R.layout.bottomsheet_urls, container, false)
         view.apply {
             findViewById<LinearLayout>(R.id.open_short).setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(shortURL))
-                startActivity(intent)
+                openUrl(shortURL)
             }
             findViewById<LinearLayout>(R.id.open_long).setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(longURL))
-                startActivity(intent)
+                openUrl(longURL)
             }
             findViewById<LinearLayout>(R.id.share_short).setOnClickListener {
                 openShareChooser(shortURL)

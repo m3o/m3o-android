@@ -1,7 +1,5 @@
 package com.m3o.mobile.activities
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +8,7 @@ import androidx.core.view.WindowCompat
 import com.m3o.mobile.R
 import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.ActivityStartBinding
+import com.m3o.mobile.utils.openUrl
 
 class StartActivity : AppCompatActivity() {
 
@@ -23,8 +22,7 @@ class StartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.fab.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/vhBuhvYJtG"))
-            startActivity(intent)
+            openUrl("https://discord.gg/vhBuhvYJtG")
         }
 
         Networking.initialize()

@@ -3,7 +3,6 @@ package com.m3o.mobile.fragments.services.jokes
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.JokesService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceJokesBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
 class JokesFragment : Fragment() {
@@ -61,10 +60,7 @@ class JokesFragment : Fragment() {
             }
         } catch (e: Exception) {
             binding.progressBar.visibility = View.INVISIBLE
-            MaterialAlertDialogBuilder(myContext)
-                .setTitle("Error")
-                .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                .show()
+            showErrorDialog(e.message)
         }
     }
 

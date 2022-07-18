@@ -3,7 +3,6 @@ package com.m3o.mobile.fragments.services.bitcoin
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.BitcoinService
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceBitcoinBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
 class BitcoinFragment : Fragment() {
@@ -56,10 +55,7 @@ class BitcoinFragment : Fragment() {
             }
         } catch (e: Exception) {
             binding.progressBar.visibility = View.INVISIBLE
-            MaterialAlertDialogBuilder(myContext)
-                .setTitle("Error")
-                .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                .show()
+            showErrorDialog(e.message)
         }
     }
 
@@ -70,10 +66,7 @@ class BitcoinFragment : Fragment() {
                 @SuppressLint("SetTextI18n")
                 binding.priceView.text = "$data $"
             } catch (e: Exception) {
-                MaterialAlertDialogBuilder(myContext)
-                    .setTitle("Error")
-                    .setMessage(Html.fromHtml("<b>Exception Message</b>:<br/>${e.message}"))
-                    .show()
+                showErrorDialog(e.message)
             }
             binding.progressBar.visibility = View.INVISIBLE
         }
