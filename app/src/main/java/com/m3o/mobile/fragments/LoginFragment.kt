@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,11 +50,24 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.submitButton.setOnClickListener {
+            binding.passwordInput.error = null
+            val email = binding.mailInputText.text.toString()
+            if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.mailInput.error = "Invalid email address"
+                return@setOnClickListener
+            }
+            binding.mailInput.error = null
+
+            val password = binding.passwordInputText.text.toString()
+            if (password.isEmpty()) {
+                binding.passwordInput.error = "Empty password"
+                return@setOnClickListener
+            }
+
             binding.submitButton.isEnabled = false
             binding.apiKeyButton.isEnabled = false
             binding.progressBar.visibility = View.VISIBLE
-            val email = binding.mailInputText.text.toString()
-            val password = binding.passwordInputText.text.toString()
+
             lifecycleScope.launch {
                 try {
                     val token = LoginService.login(email, password).token
