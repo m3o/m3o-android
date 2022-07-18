@@ -88,11 +88,12 @@ class AvatarFragment : Fragment() {
                         binding.avatarView.setImageBitmap(avatar)
                         binding.saveButton.visibility = View.VISIBLE
                         binding.shareButton.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
-                        binding.progressBar.visibility = View.INVISIBLE
+                        e.printStackTrace()
+                        logE("Loading avatar failed")
                         showErrorDialog(e.message)
                     }
+                    binding.progressBar.visibility = View.INVISIBLE
                 }
                 return@OnKeyListener true
             }
@@ -178,7 +179,9 @@ class AvatarFragment : Fragment() {
             out.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            showToast("Sharing avatar failed")
+            val errorMessage = "Sharing avatar failed"
+            logE(errorMessage)
+            showToast(errorMessage)
         }
         return file
     }
@@ -221,7 +224,9 @@ class AvatarFragment : Fragment() {
                 showToast("Avatar saved to gallery")
             } catch (e: Exception) {
                 e.printStackTrace()
-                showToast("Saving avatar failed")
+                val errorMessage = "Saving avatar failed"
+                logE(errorMessage)
+                showToast(errorMessage)
             }
         }
     }

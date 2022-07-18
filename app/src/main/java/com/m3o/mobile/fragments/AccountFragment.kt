@@ -54,11 +54,12 @@ class AccountFragment : Fragment() {
                     Networking.initializeAuth(Safe.getAndDecryptAccessToken(myContext))
                     val balance = AccountService.balance(Safe.getAndDecryptUserId(myContext))
                     binding.balanceView.text = (balance.currentBalance.toFloat() / 1000000).toString()
-                    binding.progressBar.visibility = View.INVISIBLE
                 } catch (e: Exception) {
-                    binding.progressBar.visibility = View.INVISIBLE
+                    e.printStackTrace()
+                    logE("Retrieving account balance failed")
                     showErrorDialog(e.message)
                 }
+                binding.progressBar.visibility = View.INVISIBLE
             }
         }
 
@@ -115,9 +116,13 @@ class AccountFragment : Fragment() {
 
         binding.logoutButton.setOnClickListener {
             Safe.storeKey(myContext, EMAIL, "")
+            logD("Email cleared")
             Safe.encryptAndStoreAccessToken(myContext, "")
+            logD("Access token cleared")
             Safe.encryptAndStoreUserId(myContext, "")
+            logD("User Id cleared")
             Safe.encryptAndStoreApiKey(myContext, "")
+            logD("API Key cleared")
             requireActivity().finish()
             startActivity(Intent(myContext, StartActivity::class.java))
         }

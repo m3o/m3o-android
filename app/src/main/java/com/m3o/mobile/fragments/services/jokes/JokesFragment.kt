@@ -13,6 +13,7 @@ import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.JokesService
 import com.m3o.mobile.databinding.FragmentServiceJokesBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
@@ -37,12 +38,12 @@ class JokesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        try {
-            binding.progressBar.visibility = View.VISIBLE
-            if (!M3O.isInitialized()) {
-                M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-            }
-            lifecycleScope.launch {
+        binding.progressBar.visibility = View.VISIBLE
+        if (!M3O.isInitialized()) {
+            M3O.initialize(Safe.getAndDecryptApiKey(myContext))
+        }
+        lifecycleScope.launch {
+            try {
                 val data = JokesService.random(10).jokes
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
@@ -56,11 +57,12 @@ class JokesFragment : Fragment() {
                         startActivity(Intent.createChooser(shareIntent, null))
                     }
                 }
-                binding.progressBar.visibility = View.INVISIBLE
+            } catch (e: Exception) {
+                e.printStackTrace()
+                logE("Fetching and showing Jokes failed")
+                showErrorDialog(e.message)
             }
-        } catch (e: Exception) {
             binding.progressBar.visibility = View.INVISIBLE
-            showErrorDialog(e.message)
         }
     }
 

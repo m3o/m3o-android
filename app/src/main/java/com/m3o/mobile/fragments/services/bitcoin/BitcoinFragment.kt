@@ -13,6 +13,7 @@ import com.cyb3rko.m3okotlin.services.BitcoinService
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceBitcoinBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
@@ -66,6 +67,8 @@ class BitcoinFragment : Fragment() {
                 @SuppressLint("SetTextI18n")
                 binding.priceView.text = "$data $"
             } catch (e: Exception) {
+                e.printStackTrace()
+                logE("Fetching Bitcoin price failed")
                 showErrorDialog(e.message)
             }
             binding.progressBar.visibility = View.INVISIBLE

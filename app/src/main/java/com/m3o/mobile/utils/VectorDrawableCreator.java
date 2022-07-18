@@ -8,7 +8,6 @@ import android.util.Log;
 import android.util.Xml;
 import androidx.annotation.NonNull;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
@@ -299,12 +298,6 @@ public class VectorDrawableCreator {
         byte[] binXml = new byte[bb.position()];
         bb.rewind();
         bb.get(binXml);
-
-        try {
-            Log.d("XML", new String(binXml, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
 
         return binXml;
     }

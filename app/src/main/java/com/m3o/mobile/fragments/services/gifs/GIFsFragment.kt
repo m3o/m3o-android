@@ -13,10 +13,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.GIFsService
 import com.m3o.mobile.databinding.FragmentServiceGifsBinding
-import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.hideKeyboard
-import com.m3o.mobile.utils.showErrorDialog
-import com.m3o.mobile.utils.showToast
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -90,6 +87,8 @@ class GIFsFragment : Fragment() {
                         }
                         binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
+                        e.printStackTrace()
+                        logE("Retrieving and showing GIFs failed")
                         binding.progressBar.visibility = View.INVISIBLE
                         showErrorDialog(e.message)
                     }
@@ -118,7 +117,9 @@ class GIFsFragment : Fragment() {
             out.close()
         } catch (e: Exception) {
             e.printStackTrace()
-            showToast("Sharing GIF failed")
+            val errorMessage = "Sharing GIF failed"
+            logE(errorMessage)
+            showToast(errorMessage)
         }
         return file
     }

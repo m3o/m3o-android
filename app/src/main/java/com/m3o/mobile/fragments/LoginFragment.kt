@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -69,31 +68,31 @@ class LoginFragment : Fragment() {
                     val token = LoginService.login(email, password).token
                     val accessToken = token.accessToken
                     val refreshToken = token.refreshToken
-                    println(refreshToken)
-                    println(accessToken)
-                    Log.d("M3O Mobile", "Log in complete")
+                    logD("Log in complete")
 
                     Safe.storeKey(myContext, EMAIL, email)
-                    Log.d("M3O Mobile", "Email stored")
+                    logD("Email stored")
 
                     Safe.encryptAndStoreAccessToken(myContext, accessToken)
                     Safe.storeKey(myContext, REFRESH_TOKEN, refreshToken)
-                    Log.d("M3O Mobile", "Access and refresh tokens stored")
+                    logD("Access and refresh tokens stored")
 
                     Networking.initializeAuth(accessToken)
                     val userId = AccountService.read(email, password).customer.id
                     Safe.encryptAndStoreUserId(myContext, userId)
-                    Log.d("M3O Mobile", "User Id stored")
+                    logD("User Id stored")
 
                     val apiKey = LoginService.createKey().apiKey
                     Safe.encryptAndStoreApiKey(myContext, apiKey)
-                    Log.d("M3O Mobile", "API key stored")
+                    logD("API key stored")
 
                     val intent = Intent(myContext, MainActivity::class.java).apply {
                         putExtra(SKIP_REFRESH, true)
                     }
                     startActivity(intent)
                 } catch (e: Exception) {
+                    e.printStackTrace()
+                    logE("Log in failed")
                     binding.progressBar.visibility = View.INVISIBLE
                     binding.submitButton.isEnabled = true
                     binding.apiKeyButton.isEnabled = true
@@ -122,7 +121,7 @@ class LoginFragment : Fragment() {
                             if (Regex("[a-zA-Z0-9]+").matches(apiKey) && apiKey.length <= 64) {
                                 Safe.encryptAndStoreApiKey(myContext, apiKey)
                                 dismiss()
-                                Log.d("M3O Mobile", "API key stored")
+                                logD("API key stored")
                                 startActivity(Intent(myContext, MainActivity::class.java))
                             } else {
                                 inputField.error = "Invalid API key format"

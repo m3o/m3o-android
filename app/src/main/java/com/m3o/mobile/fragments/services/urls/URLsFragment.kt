@@ -13,6 +13,7 @@ import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.URLsService
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
 import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
@@ -37,22 +38,26 @@ class URLsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        try {
-            binding.progressBar.visibility = View.VISIBLE
-            if (!M3O.isInitialized()) {
-                M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-            }
-            lifecycleScope.launch {
+        binding.progressBar.visibility = View.VISIBLE
+        if (!M3O.isInitialized()) {
+            M3O.initialize(Safe.getAndDecryptApiKey(myContext))
+        }
+        lifecycleScope.launch {
+            try {
                 val data = URLsService.list().urlPairs
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
-                    adapter = URLsAdapter((myContext as AppCompatActivity).supportFragmentManager, data)
+                    adapter = URLsAdapter(
+                        (myContext as AppCompatActivity).supportFragmentManager,
+                        data
+                    )
                 }
-                binding.progressBar.visibility = View.INVISIBLE
+            } catch (e: Exception) {
+                e.printStackTrace()
+                logE("Fetching and showing URLs failed")
+                showErrorDialog(e.message)
             }
-        } catch (e: Exception) {
             binding.progressBar.visibility = View.INVISIBLE
-            showErrorDialog(e.message)
         }
     }
 

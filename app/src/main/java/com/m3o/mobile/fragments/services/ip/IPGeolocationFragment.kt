@@ -16,6 +16,7 @@ import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceIpGeolocationBinding
 import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.hideKeyboard
+import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
 
@@ -78,11 +79,12 @@ class IPGeolocationFragment : Fragment() {
                             binding.informationView.addView(infoView)
                             binding.informationView.addView(spaceView)
                         }
-                        binding.progressBar.visibility = View.INVISIBLE
                     } catch (e: Exception) {
-                        binding.progressBar.visibility = View.INVISIBLE
+                        e.printStackTrace()
+                        logE("Looking up IP and showing results failed")
                         showErrorDialog(e.message)
                     }
+                    binding.progressBar.visibility = View.INVISIBLE
                 }
                 return@setOnKeyListener true
             }

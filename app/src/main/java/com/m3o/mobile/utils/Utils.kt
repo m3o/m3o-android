@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.text.Html
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -23,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec
 internal const val ACCESS_TOKEN = "access_token"
 internal const val API_KEY = "key"
 internal const val EMAIL = "email"
+internal const val LOG_APP_ID = "M3O-Mobile"
 internal const val REFRESH_TOKEN = "refresh_token"
 internal const val SHARED_PREFERENCE = "Safe"
 internal const val SKIP_REFRESH = "skip_refresh"
@@ -85,6 +87,10 @@ internal fun Context.openUrl(url: String) {
 internal fun Fragment.openUrl(url: String) {
     requireContext().openUrl(url)
 }
+
+internal fun logD(message: String) = Log.d(LOG_APP_ID, message)
+
+internal fun logE(message: String) = Log.e(LOG_APP_ID, message)
 
 internal fun getServiceIcon(
     context: Context,

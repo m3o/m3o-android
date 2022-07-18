@@ -10,10 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.IDService
 import com.m3o.mobile.databinding.FragmentServiceIdBinding
-import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.showErrorDialog
-import com.m3o.mobile.utils.showToast
-import com.m3o.mobile.utils.storeToClipboard
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 
 class IDFragment : Fragment() {
@@ -95,16 +92,19 @@ class IDFragment : Fragment() {
                     if (idType.typeName == idResponse.type) {
                         binding.resultButton.text = idResponse.id
                     } else {
+                        logE("Retrieved ID type differs from request")
                         showErrorDialog()
                     }
                 } catch (e: Exception) {
+                    e.printStackTrace()
+                    logE("ID generation failed")
                     showErrorDialog(e.message)
                 }
-                binding.progressBar.visibility = View.INVISIBLE
             } else {
-                binding.progressBar.visibility = View.INVISIBLE
+                logE("Invalid ID type chosen")
                 showErrorDialog()
             }
+            binding.progressBar.visibility = View.INVISIBLE
         }
     }
 

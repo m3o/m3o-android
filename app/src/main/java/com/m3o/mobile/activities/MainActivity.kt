@@ -2,7 +2,6 @@ package com.m3o.mobile.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +17,7 @@ import com.m3o.mobile.R
 import com.m3o.mobile.api.LoginService
 import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.ActivityMainBinding
-import com.m3o.mobile.utils.REFRESH_TOKEN
-import com.m3o.mobile.utils.SKIP_REFRESH
-import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.openUrl
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         var skipRefreshAndClickListener = false
         if (Safe.getAndDecryptApiKey(applicationContext).isEmpty()) {
+            logD("API key not found, opening StartActivity")
             skipRefreshAndClickListener = true
             finish()
             startActivity(Intent(applicationContext, StartActivity::class.java))
@@ -63,13 +60,17 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))
-                        Log.d("M3O-Mobile", "Access token refreshed")
+                        logD("Access token refreshed")
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        Log.d("M3O-Mobile", "Refreshing access token failed")
+                        logE("Refreshing access token failed")
                     }
                 }
+            } else {
+                logD("Access token refreshment skipped")
             }
+        } else {
+            logD("MainActivity preparation skipped to instantly open StartActivity")
         }
     }
 
