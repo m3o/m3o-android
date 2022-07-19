@@ -23,6 +23,7 @@ import javax.crypto.spec.SecretKeySpec
 
 internal const val ACCESS_TOKEN = "access_token"
 internal const val API_KEY = "key"
+internal const val CARBON_OFFSET = "carbon_offset"
 internal const val EMAIL = "email"
 internal const val LOG_APP_ID = "M3O-Mobile"
 internal const val REFRESH_TOKEN = "refresh_token"
@@ -128,9 +129,25 @@ internal object Safe {
             .apply()
     }
 
+    internal fun storeInt(
+        context: Context,
+        label: String,
+        content: Int
+    ) {
+        context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
+            .edit()
+            .putInt(label, content)
+            .apply()
+    }
+
     internal fun getKey(context: Context, label: String): String {
         return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
             .getString(label, "")!!
+    }
+
+    internal fun getInt(context: Context, label: String): Int {
+        return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE)
+            .getInt(label, 0)
     }
 
     internal fun encryptAndStoreAccessToken(context: Context, accessToken: String) {

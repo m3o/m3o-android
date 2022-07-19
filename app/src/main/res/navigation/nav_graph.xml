@@ -30,6 +30,12 @@
         android:label="Bitcoin" />
 
     <fragment
+        android:id="@+id/CarbonFragment"
+        android:name="com.m3o.mobile.fragments.services.carbon.CarbonFragment"
+        tools:layout="@layout/fragment_service_carbon"
+        android:label="Carbon" />
+
+    <fragment
         android:id="@+id/GIFsFragment"
         android:name="com.m3o.mobile.fragments.services.gifs.GIFsFragment"
         tools:layout="@layout/fragment_service_gifs"

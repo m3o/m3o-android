@@ -36,6 +36,7 @@ class ServicesFragment : Fragment() {
         val list = mutableListOf<ServicesViewModel>()
         list.add(ServicesViewModel("Avatar"))
         list.add(ServicesViewModel("Bitcoin"))
+        list.add(ServicesViewModel("Carbon"))
         list.add(ServicesViewModel("GIFs"))
         list.add(ServicesViewModel("ID"))
         list.add(ServicesViewModel("IP Geolocation"))
@@ -55,6 +56,7 @@ class ServicesFragment : Fragment() {
         when (service) {
             "avatar" -> findNavController().navigate(R.id.AvatarFragment)
             "bitcoin" -> findNavController().navigate(R.id.BitcoinFragment)
+            "carbon" -> findNavController().navigate(R.id.CarbonFragment)
             "gifs" -> findNavController().navigate(R.id.GIFsFragment)
             "id" -> findNavController().navigate(R.id.IDFragment)
             "ip_geolocation" -> findNavController().navigate(R.id.IPGeolocationFragment)
