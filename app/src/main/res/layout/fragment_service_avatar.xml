@@ -18,7 +18,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:indeterminate="true"
-            android:visibility="gone" />
+            android:visibility="invisible"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/format_buttons"

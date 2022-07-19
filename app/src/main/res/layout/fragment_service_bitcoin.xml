@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="invisible"
             tools:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView

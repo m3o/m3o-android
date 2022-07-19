@@ -9,5 +9,5 @@ object Secrets {
         System.loadLibrary("secrets")
     }
 
-    external fun getCipherPassword(packageName: String = "com.m3o.m3omobile"): String
+    external fun getCipherPassword(packageName: String = "com.m3o.mobile"): String
 }
