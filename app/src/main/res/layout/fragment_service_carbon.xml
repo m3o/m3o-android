@@ -2,13 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="32dp"
         android:orientation="vertical">
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -29,12 +29,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:textSize="17sp"
             android:gravity="center_horizontal"
-            android:text="Purchase carbon offsets to help fighting climate change and achieve carbon neutrality.\n\nOffset purchases are currently limited to 1 kg (0.001 tonne) per request.\n\nHold the button for changing offset amount." />
+            android:text="Purchase carbon offsets to help fighting climate change and achieve carbon neutrality.\n\nOffset purchases are currently limited to 1 kg (0.001 tonne) per request." />
+
+        <TextView
+            android:id="@+id/hold_description_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/description_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="38dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="17sp"
+            android:textStyle="bold|italic"
+            android:gravity="center_horizontal"
+            android:text="Hold the button for changing offset amount." />
 
         <nl.dionsegijn.konfetti.xml.KonfettiView
             android:id="@+id/konfetti_view"
@@ -58,7 +73,7 @@
             android:id="@+id/offset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/description_view"
+            app:layout_constraintTop_toBottomOf="@id/hold_description_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="50dp"
@@ -74,7 +89,7 @@
             android:id="@+id/counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Total: 15 kg CO2"
+            tools:text="Total bought: 15 kg CO2"
             app:layout_constraintTop_toBottomOf="@id/offset_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -97,13 +112,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/projects_view"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:paddingBottom="32dp"
+            android:clipToPadding="false" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
