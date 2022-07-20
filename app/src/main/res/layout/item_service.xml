@@ -14,25 +14,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/service_image"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             tools:src="@drawable/m3o" />
 
         <TextView
             android:id="@+id/service_name_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-medium"
             tools:text="Hello World"/>
 
