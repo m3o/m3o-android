@@ -45,12 +45,17 @@ class URLsFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val data = URLsService.list().urlPairs
-                binding.recycler.apply {
-                    layoutManager = LinearLayoutManager(myContext)
-                    adapter = URLsAdapter(
-                        (myContext as AppCompatActivity).supportFragmentManager,
-                        data
-                    )
+                if (data.isNotEmpty()) {
+                    binding.recycler.apply {
+                        layoutManager = LinearLayoutManager(myContext)
+                        adapter = URLsAdapter(
+                            (myContext as AppCompatActivity).supportFragmentManager,
+                            data
+                        )
+                    }
+                } else {
+                    binding.animationView.visibility = View.VISIBLE
+                    binding.emptyTextView.visibility = View.VISIBLE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
