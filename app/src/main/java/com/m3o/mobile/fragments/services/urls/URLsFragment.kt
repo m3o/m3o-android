@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.URLsService
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
 import com.m3o.mobile.utils.Safe
@@ -42,6 +43,7 @@ class URLsFragment : Fragment() {
         if (!M3O.isInitialized()) {
             M3O.initialize(Safe.getAndDecryptApiKey(myContext))
         }
+        binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             fetchData()
         }
@@ -49,6 +51,7 @@ class URLsFragment : Fragment() {
         binding.fab.setOnClickListener {
             val bottomSheet = URLsBottomSheetNew {
                 lifecycleScope.launch {
+                    binding.progressBar.visibility = View.VISIBLE
                     URLsService.shorten(it)
                     fetchData()
                 }
@@ -59,7 +62,6 @@ class URLsFragment : Fragment() {
 
     private suspend fun fetchData() {
         try {
-            binding.progressBar.visibility = View.VISIBLE
             binding.animationView.visibility = View.GONE
             binding.emptyTextView.visibility = View.GONE
             val data = URLsService.list().urlPairs
@@ -69,7 +71,19 @@ class URLsFragment : Fragment() {
                     adapter = URLsAdapter(
                         (myContext as AppCompatActivity).supportFragmentManager,
                         data
-                    )
+                    ) {
+                        MaterialAlertDialogBuilder(myContext)
+                            .setTitle("Delete short URL?")
+                            .setMessage("Are you sure you want to delete this short URL?\n\n$it")
+                            .setPositiveButton("Yes") { _, _ ->
+                                lifecycleScope.launch {
+                                    binding.progressBar.visibility = View.VISIBLE
+                                    URLsService.delete(it)
+                                    fetchData()
+                                }
+                            }
+                            .show()
+                    }
                 }
             } else {
                 binding.animationView.visibility = View.VISIBLE

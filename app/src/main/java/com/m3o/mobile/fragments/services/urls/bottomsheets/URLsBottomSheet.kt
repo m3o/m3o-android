@@ -12,7 +12,8 @@ import com.m3o.mobile.utils.openUrl
 
 class URLsBottomSheet(
     private val shortURL: String,
-    private val longURL: String
+    private val longURL: String,
+    private val onDelete: (shortURL: String) -> Unit
 ) : BottomSheetDialogFragment() {
 
     override fun onCreateView(
@@ -33,6 +34,10 @@ class URLsBottomSheet(
             }
             findViewById<LinearLayout>(R.id.share_long).setOnClickListener {
                 openShareChooser(longURL)
+            }
+            findViewById<LinearLayout>(R.id.delete).setOnClickListener {
+                dismiss()
+                onDelete(shortURL)
             }
         }
         return view

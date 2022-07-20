@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat
 
 class URLsAdapter(
     private val fragmentManager: FragmentManager,
-    private val data: List<URLsListResponse.URL>
+    private val data: List<URLsListResponse.URL>,
+    private val onDelete: (shortUrl: String) -> Unit
 ) : RecyclerView.Adapter<URLsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +49,9 @@ class URLsAdapter(
             dateView.text = created
 
             root.setOnClickListener {
-                val bottomSheet = URLsBottomSheet(entry.shortURL, entry.destinationURL)
+                val bottomSheet = URLsBottomSheet(entry.shortURL, entry.destinationURL) {
+                    onDelete(it)
+                }
                 bottomSheet.show(fragmentManager, URLsBottomSheet.TAG)
             }
         }
