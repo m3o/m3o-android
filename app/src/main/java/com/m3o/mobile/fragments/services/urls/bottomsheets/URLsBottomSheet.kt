@@ -1,4 +1,4 @@
-package com.m3o.mobile.fragments.services.urls
+package com.m3o.mobile.fragments.services.urls.bottomsheets
 
 import android.content.Intent
 import android.os.Bundle

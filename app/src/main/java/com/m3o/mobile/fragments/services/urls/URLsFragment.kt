@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.URLsService
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
+import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
 import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
@@ -38,32 +39,48 @@ class URLsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.progressBar.visibility = View.VISIBLE
         if (!M3O.isInitialized()) {
             M3O.initialize(Safe.getAndDecryptApiKey(myContext))
         }
         lifecycleScope.launch {
-            try {
-                val data = URLsService.list().urlPairs
-                if (data.isNotEmpty()) {
-                    binding.recycler.apply {
-                        layoutManager = LinearLayoutManager(myContext)
-                        adapter = URLsAdapter(
-                            (myContext as AppCompatActivity).supportFragmentManager,
-                            data
-                        )
-                    }
-                } else {
-                    binding.animationView.visibility = View.VISIBLE
-                    binding.emptyTextView.visibility = View.VISIBLE
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                logE("Fetching and showing URLs failed")
-                showErrorDialog(e.message)
-            }
-            binding.progressBar.visibility = View.INVISIBLE
+            fetchData()
         }
+
+        binding.fab.setOnClickListener {
+            val bottomSheet = URLsBottomSheetNew {
+                lifecycleScope.launch {
+                    URLsService.shorten(it)
+                    fetchData()
+                }
+            }
+            bottomSheet.show(parentFragmentManager, URLsBottomSheetNew.TAG)
+        }
+    }
+
+    private suspend fun fetchData() {
+        try {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.animationView.visibility = View.GONE
+            binding.emptyTextView.visibility = View.GONE
+            val data = URLsService.list().urlPairs
+            if (data.isNotEmpty()) {
+                binding.recycler.apply {
+                    layoutManager = LinearLayoutManager(myContext)
+                    adapter = URLsAdapter(
+                        (myContext as AppCompatActivity).supportFragmentManager,
+                        data
+                    )
+                }
+            } else {
+                binding.animationView.visibility = View.VISIBLE
+                binding.emptyTextView.visibility = View.VISIBLE
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            logE("Fetching and showing URLs failed")
+            showErrorDialog(e.message)
+        }
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     override fun onDestroyView() {

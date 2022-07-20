@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cyb3rko.m3okotlin.data.URLsListResponse
 import com.google.android.material.card.MaterialCardView
 import com.m3o.mobile.R
+import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheet
 import java.text.SimpleDateFormat
 
 class URLsAdapter(
@@ -30,7 +31,8 @@ class URLsAdapter(
         val slug = entry.shortURL.split("/").last()
         @SuppressLint("SimpleDateFormat")
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-        val date = dateFormat.parse(entry.created.dropLast(11))
+        val cutValue = entry.created.dropLastWhile { it != '.' }
+        val date = dateFormat.parse(cutValue.dropLast(1))
 
         var created = ""
         if (date != null) {
