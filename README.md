@@ -1,2 +1,3 @@
-# m3o-mobile-android
-The mobile Android app for M3O
+# M3O Android
+
+The M3O mobile app for Android
