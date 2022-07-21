@@ -56,18 +56,23 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {
-                Networking.initializeAuth(Safe.getAndDecryptAccessToken(applicationContext))
-                lifecycleScope.launch {
-                    try {
-                        LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))
-                        logD("Access token refreshed")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        logE("Refreshing access token failed")
+                val accessToken = Safe.getAndDecryptAccessToken(applicationContext)
+                if (accessToken != "") {
+                    Networking.initializeAuth(accessToken)
+                    lifecycleScope.launch {
+                        try {
+                            LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))
+                            logD("Access token refreshed")
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            logE("Refreshing access token failed")
+                        }
                     }
+                } else {
+                    logD("Access token empty, skipping refresh")
                 }
             } else {
-                logD("Access token refreshment skipped")
+                logD("Access token refreshment explicitly skipped")
             }
         } else {
             logD("MainActivity preparation skipped to instantly open StartActivity")
