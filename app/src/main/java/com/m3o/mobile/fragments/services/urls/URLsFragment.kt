@@ -91,7 +91,7 @@ class URLsFragment : Fragment() {
                                 .setPositiveButton("Yes") { _, _ ->
                                     lifecycleScope.launch {
                                         binding.progressBar.visibility = View.VISIBLE
-                                        UrlsService.delete(it)
+                                        UrlsService.delete(shortUrl = it)
                                         fetchData()
                                     }
                                 }
@@ -100,6 +100,7 @@ class URLsFragment : Fragment() {
                     )
                 }
             } else {
+                binding.recycler.visibility = View.GONE
                 binding.animationView.visibility = View.VISIBLE
                 binding.emptyTextView.visibility = View.VISIBLE
             }
