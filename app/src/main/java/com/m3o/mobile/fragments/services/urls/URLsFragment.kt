@@ -13,6 +13,7 @@ import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.UrlsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
+import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetEdit
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
 import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.logE
@@ -70,20 +71,33 @@ class URLsFragment : Fragment() {
                     layoutManager = LinearLayoutManager(myContext)
                     adapter = URLsAdapter(
                         (myContext as AppCompatActivity).supportFragmentManager,
-                        data
-                    ) {
-                        MaterialAlertDialogBuilder(myContext)
-                            .setTitle("Delete short URL?")
-                            .setMessage("Are you sure you want to delete this short URL?\n\n$it")
-                            .setPositiveButton("Yes") { _, _ ->
-                                lifecycleScope.launch {
-                                    binding.progressBar.visibility = View.VISIBLE
-                                    UrlsService.delete(it)
-                                    fetchData()
+                        data,
+                        onEdit = { oldDestinationUrl, id ->
+                            val bottomSheet = URLsBottomSheetEdit(oldDestinationUrl) {
+                                if (oldDestinationUrl != it) {
+                                    lifecycleScope.launch {
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        UrlsService.update(it, id)
+                                        fetchData()
+                                    }
                                 }
                             }
-                            .show()
-                    }
+                            bottomSheet.show(parentFragmentManager, URLsBottomSheetEdit.TAG)
+                        },
+                        onDelete = {
+                            MaterialAlertDialogBuilder(myContext)
+                                .setTitle("Delete short URL?")
+                                .setMessage("Are you sure you want to delete this short URL?\n\n$it")
+                                .setPositiveButton("Yes") { _, _ ->
+                                    lifecycleScope.launch {
+                                        binding.progressBar.visibility = View.VISIBLE
+                                        UrlsService.delete(it)
+                                        fetchData()
+                                    }
+                                }
+                                .show()
+                        }
+                    )
                 }
             } else {
                 binding.animationView.visibility = View.VISIBLE

@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_send"
+            android:src="@android:drawable/ic_menu_send"
             android:layout_margin="8dp" />
 
         <TextView
@@ -94,6 +94,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Share destination URL"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:layout_margin="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
             android:textSize="16sp"
             android:layout_gravity="center_vertical"
             android:padding="8dp" />

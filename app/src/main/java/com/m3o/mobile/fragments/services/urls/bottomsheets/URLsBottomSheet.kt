@@ -11,8 +11,9 @@ import com.m3o.mobile.R
 import com.m3o.mobile.utils.openUrl
 
 class URLsBottomSheet(
-    private val shortURL: String,
-    private val longURL: String,
+    private val shortUrl: String,
+    private val destinationUrl: String,
+    private val onEdit: (shortURL: String) -> Unit,
     private val onDelete: (shortURL: String) -> Unit
 ) : BottomSheetDialogFragment() {
 
@@ -24,20 +25,24 @@ class URLsBottomSheet(
         val view = inflater.inflate(R.layout.bottomsheet_urls, container, false)
         view.apply {
             findViewById<LinearLayout>(R.id.open_short).setOnClickListener {
-                openUrl(shortURL)
+                openUrl(shortUrl)
             }
             findViewById<LinearLayout>(R.id.open_long).setOnClickListener {
-                openUrl(longURL)
+                openUrl(destinationUrl)
             }
             findViewById<LinearLayout>(R.id.share_short).setOnClickListener {
-                openShareChooser(shortURL)
+                openShareChooser(shortUrl)
             }
             findViewById<LinearLayout>(R.id.share_long).setOnClickListener {
-                openShareChooser(longURL)
+                openShareChooser(destinationUrl)
+            }
+            findViewById<LinearLayout>(R.id.edit).setOnClickListener {
+                dismiss()
+                onEdit(destinationUrl)
             }
             findViewById<LinearLayout>(R.id.delete).setOnClickListener {
                 dismiss()
-                onDelete(shortURL)
+                onDelete(shortUrl)
             }
         }
         return view
