@@ -12,12 +12,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.cyb3rko.m3okotlin.data.GIFsResponse
+import com.cyb3rko.m3okotlin.data.GifsResponse
 import com.m3o.mobile.R
 
 class GIFsAdapter(
     private val context: Context,
-    private val data: List<GIFsResponse.GIF>,
+    private val data: List<GifsResponse.Gif>,
     val onClick: (gif: GifDrawable, position: Int) -> Unit
 ) : RecyclerView.Adapter<GIFsAdapter.ViewHolder>() {
 

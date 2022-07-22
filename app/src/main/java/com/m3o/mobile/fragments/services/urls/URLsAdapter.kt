@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cyb3rko.m3okotlin.data.URLsListResponse
+import com.cyb3rko.m3okotlin.data.Url
 import com.google.android.material.card.MaterialCardView
 import com.m3o.mobile.R
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheet
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 
 class URLsAdapter(
     private val fragmentManager: FragmentManager,
-    private val data: List<URLsListResponse.URL>,
+    private val data: List<Url>,
     private val onDelete: (shortUrl: String) -> Unit
 ) : RecyclerView.Adapter<URLsAdapter.ViewHolder>() {
 
@@ -29,7 +29,7 @@ class URLsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entry = data[position]
 
-        val slug = entry.shortURL.split("/").last()
+        val slug = entry.shortUrl.split("/").last()
         @SuppressLint("SimpleDateFormat")
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         val cutValue = entry.created.dropLastWhile { it != '.' }
@@ -44,12 +44,12 @@ class URLsAdapter(
 
         holder.apply {
             slugView.text = slug
-            destinationView.text = entry.destinationURL
+            destinationView.text = entry.destinationUrl
             counterView.text = "Clicks: ${entry.hitCount}"
             dateView.text = created
 
             root.setOnClickListener {
-                val bottomSheet = URLsBottomSheet(entry.shortURL, entry.destinationURL) {
+                val bottomSheet = URLsBottomSheet(entry.shortUrl, entry.destinationUrl) {
                     onDelete(it)
                 }
                 bottomSheet.show(fragmentManager, URLsBottomSheet.TAG)

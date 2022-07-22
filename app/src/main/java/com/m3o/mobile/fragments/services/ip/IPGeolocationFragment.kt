@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
-import com.cyb3rko.m3okotlin.services.IPGeolocationService
+import com.cyb3rko.m3okotlin.services.IpGeolocationService
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceIpGeolocationBinding
 import com.m3o.mobile.utils.Safe
@@ -52,7 +52,7 @@ class IPGeolocationFragment : Fragment() {
                 val ip = binding.ipAddressInputText.text.toString()
                 lifecycleScope.launch {
                     try {
-                        val data = IPGeolocationService.lookup(ip)
+                        val data = IpGeolocationService.lookup(ip)
                         var output = mutableListOf<Pair<String, String>>()
                         if (data.asn != null) {
                             output.add("ASN" to data.asn.toString())

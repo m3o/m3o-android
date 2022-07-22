@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cyb3rko.m3okotlin.M3O
-import com.cyb3rko.m3okotlin.services.IDService
+import com.cyb3rko.m3okotlin.services.IdService
 import com.m3o.mobile.databinding.FragmentServiceIdBinding
 import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
@@ -88,7 +88,7 @@ class IDFragment : Fragment() {
 
             if (idType != null) {
                 try {
-                    val idResponse = IDService.generate(idType.typeName)
+                    val idResponse = IdService.generate(idType.typeName)
                     if (idType.typeName == idResponse.type) {
                         binding.resultButton.text = idResponse.id
                     } else {

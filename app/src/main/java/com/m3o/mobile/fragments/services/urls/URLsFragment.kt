@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyb3rko.m3okotlin.M3O
-import com.cyb3rko.m3okotlin.services.URLsService
+import com.cyb3rko.m3okotlin.services.UrlsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
@@ -52,7 +52,7 @@ class URLsFragment : Fragment() {
             val bottomSheet = URLsBottomSheetNew {
                 lifecycleScope.launch {
                     binding.progressBar.visibility = View.VISIBLE
-                    URLsService.shorten(it)
+                    UrlsService.shorten(it)
                     fetchData()
                 }
             }
@@ -64,7 +64,7 @@ class URLsFragment : Fragment() {
         try {
             binding.animationView.visibility = View.GONE
             binding.emptyTextView.visibility = View.GONE
-            val data = URLsService.list().urlPairs
+            val data = UrlsService.list().urlPairs
             if (data.isNotEmpty()) {
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
@@ -78,7 +78,7 @@ class URLsFragment : Fragment() {
                             .setPositiveButton("Yes") { _, _ ->
                                 lifecycleScope.launch {
                                     binding.progressBar.visibility = View.VISIBLE
-                                    URLsService.delete(it)
+                                    UrlsService.delete(it)
                                     fetchData()
                                 }
                             }
