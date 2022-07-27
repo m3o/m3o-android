@@ -66,6 +66,12 @@
         android:label="Passwords" />
 
     <fragment
+        android:id="@+id/QRCodesFragment"
+        android:name="com.m3o.mobile.fragments.services.qrcodes.QRCodesFragment"
+        tools:layout="@layout/fragment_service_qr_codes"
+        android:label="QR Codes" />
+
+    <fragment
         android:id="@+id/URLsFragment"
         android:name="com.m3o.mobile.fragments.services.urls.URLsFragment"
         tools:layout="@layout/fragment_service_urls"

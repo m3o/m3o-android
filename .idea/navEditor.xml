@@ -116,6 +116,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="QRCodesFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="477" />
+                            <option name="y" value="261" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="ServicesFragment">
                     <value>
                       <LayoutPositions>
@@ -133,8 +145,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="474" />
-                            <option name="y" value="256" />
+                            <option name="x" value="169" />
+                            <option name="y" value="559" />
                           </Point>
                         </option>
                       </LayoutPositions>

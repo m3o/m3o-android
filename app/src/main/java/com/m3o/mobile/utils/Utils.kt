@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -60,6 +61,8 @@ internal fun Fragment.showDialog(title: String, message: CharSequence) {
     requireContext().showDialog(title, message)
 }
 
+internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()
+
 internal fun Fragment.showErrorDialog(message: String?) {
     showDialog(
         "An Error Occured",
@@ -94,6 +97,10 @@ internal fun Context.openUrl(url: String) {
 internal fun Fragment.openUrl(url: String) {
     requireContext().openUrl(url)
 }
+
+internal fun Context.getStringArray(id: Int) = this.resources.getStringArray(id)
+
+internal fun Fragment.getStringArray(id: Int) = requireContext().getStringArray(id)
 
 internal fun logD(message: String) = Log.d(LOG_APP_ID, message)
 

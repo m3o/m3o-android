@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="qr_codes_types">
+        <item>Text</item>
+        <item>URL</item>
+        <item>Email</item>
+        <item>Telephone</item>
+        <item>SMS</item>
+        <item>Google Play Store</item>
+    </string-array>
+</resources>

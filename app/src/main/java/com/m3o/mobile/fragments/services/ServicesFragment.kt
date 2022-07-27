@@ -42,6 +42,7 @@ class ServicesFragment : Fragment() {
         list.add(ServicesViewModel("IP Geolocation"))
         list.add(ServicesViewModel("Jokes"))
         list.add(ServicesViewModel("Passwords"))
+        list.add(ServicesViewModel("QR Codes"))
         list.add(ServicesViewModel("URLs"))
 
         binding.recycler.apply {
@@ -62,6 +63,7 @@ class ServicesFragment : Fragment() {
             "ip_geolocation" -> findNavController().navigate(R.id.IPGeolocationFragment)
             "jokes" -> findNavController().navigate(R.id.JokesFragment)
             "passwords" -> findNavController().navigate(R.id.PasswordsFragment)
+            "qr_codes" -> findNavController().navigate(R.id.QRCodesFragment)
             "urls" -> findNavController().navigate(R.id.URLsFragment)
         }
     }
