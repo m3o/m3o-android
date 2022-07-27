@@ -81,8 +81,14 @@ internal fun Fragment.hideKeyboard() {
 }
 
 internal fun Context.openUrl(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    startActivity(intent)
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        storeToClipboard("URL", url)
+        showToast("Opening URL failed, copied URL instead", Toast.LENGTH_LONG)
+    }
 }
 
 internal fun Fragment.openUrl(url: String) {
