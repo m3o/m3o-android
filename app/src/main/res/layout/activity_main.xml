@@ -56,6 +56,8 @@
         android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_discord" />
+        app:srcCompat="@drawable/ic_discord"
+        android:contentDescription="Link to Discord server"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
