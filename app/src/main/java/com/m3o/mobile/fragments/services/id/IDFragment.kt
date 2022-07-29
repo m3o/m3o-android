@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.IdService
 import com.m3o.mobile.databinding.FragmentServiceIdBinding
 import com.m3o.mobile.utils.*
@@ -54,9 +53,7 @@ class IDFragment : Fragment() {
 
     private fun fetchId(checkedButtonId: Int) {
         binding.progressBar.visibility = View.VISIBLE
-        if (!M3O.isInitialized()) {
-            M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-        }
+        initializeM3O()
         lifecycleScope.launch {
             val idType = when (checkedButtonId) {
                 binding.radio1.id -> {
@@ -88,7 +85,12 @@ class IDFragment : Fragment() {
 
             if (idType != null) {
                 try {
-                    val idResponse = IdService.generate(idType.typeName)
+                    val idResponse = try {
+                        IdService.generate(idType.typeName)
+                    } catch (_: Exception) {
+                        binding.progressBar.visibility = View.INVISIBLE
+                        return@launch
+                    }
                     if (idType.typeName == idResponse.type) {
                         binding.resultButton.text = idResponse.id
                     } else {
@@ -98,7 +100,7 @@ class IDFragment : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                     logE("ID generation failed")
-                    showErrorDialog(e.message)
+                    showErrorDialog(message = e.message)
                 }
             } else {
                 logE("Invalid ID type chosen")
@@ -109,7 +111,7 @@ class IDFragment : Fragment() {
     }
 
     private fun showErrorDialog() {
-        showErrorDialog("ID generation failed")
+        showErrorDialog(message = "ID generation failed")
     }
 
     override fun onDestroyView() {

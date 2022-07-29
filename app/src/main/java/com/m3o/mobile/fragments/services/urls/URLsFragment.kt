@@ -9,13 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cyb3rko.m3okotlin.M3O
-import com.cyb3rko.m3okotlin.services.UrlsService
+import com.cyb3rko.m3okotlin.services.UrlService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetEdit
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
-import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.initializeM3O
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
@@ -41,9 +40,7 @@ class URLsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!M3O.isInitialized()) {
-            M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-        }
+        initializeM3O()
         binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             fetchData()
@@ -53,7 +50,7 @@ class URLsFragment : Fragment() {
             val bottomSheet = URLsBottomSheetNew {
                 lifecycleScope.launch {
                     binding.progressBar.visibility = View.VISIBLE
-                    UrlsService.shorten(it)
+                    UrlService.shorten(it)
                     fetchData()
                 }
             }
@@ -65,7 +62,10 @@ class URLsFragment : Fragment() {
         try {
             binding.animationView.visibility = View.GONE
             binding.emptyTextView.visibility = View.GONE
-            val data = UrlsService.list().urlPairs
+            val data = try { UrlService.list().urlPairs } catch (_: Exception) {
+                binding.progressBar.visibility = View.INVISIBLE
+                return
+            }
             if (data.isNotEmpty()) {
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
@@ -77,7 +77,7 @@ class URLsFragment : Fragment() {
                                 if (oldDestinationUrl != it) {
                                     lifecycleScope.launch {
                                         binding.progressBar.visibility = View.VISIBLE
-                                        UrlsService.update(it, id)
+                                        UrlService.update(it, id)
                                         fetchData()
                                     }
                                 }
@@ -91,7 +91,7 @@ class URLsFragment : Fragment() {
                                 .setPositiveButton("Yes") { _, _ ->
                                     lifecycleScope.launch {
                                         binding.progressBar.visibility = View.VISIBLE
-                                        UrlsService.delete(shortUrl = it)
+                                        UrlService.delete(shortUrl = it)
                                         fetchData()
                                     }
                                 }
@@ -107,7 +107,7 @@ class URLsFragment : Fragment() {
         } catch (e: Exception) {
             e.printStackTrace()
             logE("Fetching and showing URLs failed")
-            showErrorDialog(e.message)
+            showErrorDialog(message = e.message)
         }
         binding.progressBar.visibility = View.INVISIBLE
     }

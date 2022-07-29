@@ -10,12 +10,11 @@ import android.widget.Space
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.IpGeolocationService
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceIpGeolocationBinding
-import com.m3o.mobile.utils.Safe
 import com.m3o.mobile.utils.hideKeyboard
+import com.m3o.mobile.utils.initializeM3O
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
@@ -45,14 +44,17 @@ class IPGeolocationFragment : Fragment() {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
-                if (!M3O.isInitialized()) {
-                    M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-                }
+                initializeM3O()
 
                 val ip = binding.ipAddressInputText.text.toString()
                 lifecycleScope.launch {
                     try {
-                        val data = IpGeolocationService.lookup(ip)
+                        val data = try {
+                            IpGeolocationService.lookup(ip)
+                        } catch (_: Exception) {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            return@launch
+                        }
                         var output = mutableListOf<Pair<String, String>>()
                         if (data.asn != null) {
                             output.add("ASN" to data.asn.toString())
@@ -82,7 +84,7 @@ class IPGeolocationFragment : Fragment() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         logE("Looking up IP and showing results failed")
-                        showErrorDialog(e.message)
+                        showErrorDialog(message = e.message)
                     }
                     binding.progressBar.visibility = View.INVISIBLE
                 }

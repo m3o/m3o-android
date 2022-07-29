@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.GIFsService
 import com.m3o.mobile.databinding.FragmentServiceGifsBinding
 import com.m3o.mobile.utils.*
@@ -48,14 +47,17 @@ class GIFsFragment : Fragment() {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 hideKeyboard()
                 binding.progressBar.visibility = View.VISIBLE
-                if (!M3O.isInitialized()) {
-                    M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-                }
+                initializeM3O()
 
                 val search = binding.gifSearchInputText.text.toString()
                 lifecycleScope.launch {
                     try {
-                        val data = GIFsService.search(search, 20).data
+                        val data = try {
+                            GIFsService.search(search, 20).data
+                        } catch (_: Exception) {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            return@launch
+                        }
                         if (data != null) {
                             binding.recycler.adapter = GIFsAdapter(myContext, data) { gif, _ ->
 //                            val file = cacheAvatar(gif)
@@ -90,7 +92,7 @@ class GIFsFragment : Fragment() {
                         e.printStackTrace()
                         logE("Retrieving and showing GIFs failed")
                         binding.progressBar.visibility = View.INVISIBLE
-                        showErrorDialog(e.message)
+                        showErrorDialog(message = e.message)
                     }
                 }
 

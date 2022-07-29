@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.AvatarService
 import com.m3o.mobile.databinding.FragmentServiceAvatarBinding
 import com.m3o.mobile.utils.*
@@ -60,10 +59,8 @@ class AvatarFragment : Fragment() {
                 binding.avatarView.setImageDrawable(getServiceIcon(myContext, getSvg()))
                 binding.saveButton.visibility = View.INVISIBLE
                 binding.shareButton.visibility = View.INVISIBLE
-                if (!M3O.isInitialized()) {
-                    M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-                }
 
+                initializeM3O()
                 avatarName = binding.usernameInputText.text.toString().trim()
                 val format = if (binding.jpegButton.isChecked) "jpeg" else "png"
                 val gender = if (binding.maleButton.isChecked) "male" else "female"
@@ -72,12 +69,18 @@ class AvatarFragment : Fragment() {
 
                 lifecycleScope.launch {
                     try {
-                        val data = AvatarService.generate(
-                            format,
-                            gender,
-                            false,
-                            avatarName
-                        )
+                        val data = try {
+                            AvatarService.generate(
+                                format,
+                                gender,
+                                false,
+                                avatarName
+                            )
+                        } catch (_: Exception) {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            return@launch
+                        }
+
                         val base64 = data.base64.substring(data.base64.indexOf(","))
                         val decodedString = Base64.decode(base64, Base64.DEFAULT)
                         avatar = BitmapFactory.decodeByteArray(
@@ -91,7 +94,7 @@ class AvatarFragment : Fragment() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         logE("Loading avatar failed")
-                        showErrorDialog(e.message)
+                        showErrorDialog(message = e.message)
                     }
                     binding.progressBar.visibility = View.INVISIBLE
                 }

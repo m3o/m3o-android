@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.m3o.mobile.BuildConfig
 import com.m3o.mobile.R
 import com.m3o.mobile.activities.MainActivity
 import com.m3o.mobile.api.AccountService
@@ -65,7 +66,12 @@ class LoginFragment : Fragment() {
 
             lifecycleScope.launch {
                 try {
-                    val token = LoginService.login(email, password).token
+                    val token = try {
+                        LoginService.login(email, password).token
+                    } catch (_: Exception) {
+                        resetLayout()
+                        return@launch
+                    }
                     val accessToken = token.accessToken
                     val refreshToken = token.refreshToken
                     logD("Log in complete")
@@ -77,12 +83,22 @@ class LoginFragment : Fragment() {
                     Safe.storeKey(myContext, REFRESH_TOKEN, refreshToken)
                     logD("Access and refresh tokens stored")
 
-                    Networking.initializeAuth(accessToken)
-                    val userId = AccountService.read(email, password).customer.id
+                    Networking.initializeAuth(myContext, accessToken)
+                    val userId = try {
+                        AccountService.read(email, password).customer.id
+                    } catch (_: Exception) {
+                        resetLayout()
+                        return@launch
+                    }
                     Safe.encryptAndStoreUserId(myContext, userId)
                     logD("User Id stored")
 
-                    val apiKey = LoginService.createKey().apiKey
+                    val apiKey = try {
+                        LoginService.createKey().apiKey
+                    } catch (_: Exception) {
+                        resetLayout()
+                        return@launch
+                    }
                     Safe.encryptAndStoreApiKey(myContext, apiKey)
                     logD("API key stored")
 
@@ -93,10 +109,7 @@ class LoginFragment : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                     logE("Log in failed")
-                    binding.progressBar.visibility = View.INVISIBLE
-                    binding.submitButton.isEnabled = true
-                    binding.apiKeyButton.isEnabled = true
-                    showErrorDialog(e.message)
+                    resetLayout()
                 }
             }
         }
@@ -116,21 +129,43 @@ class LoginFragment : Fragment() {
                 .create().apply {
                     setOnShowListener {
                         getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                            val apiKey = inputTextField.text.toString()
+                            if (!BuildConfig.DEBUG) {
+                                val apiKey = inputTextField.text.toString()
 
-                            if (Regex("[a-zA-Z0-9]+").matches(apiKey) && apiKey.length <= 64) {
-                                Safe.encryptAndStoreApiKey(myContext, apiKey)
-                                dismiss()
-                                logD("API key stored")
-                                startActivity(Intent(myContext, MainActivity::class.java))
+                                if (Regex("[a-zA-Z0-9]+").matches(apiKey) && apiKey.length <= 64) {
+                                    Safe.encryptAndStoreApiKey(myContext, apiKey)
+                                    dismiss()
+                                    logD("API key stored")
+                                    startActivity(Intent(myContext, MainActivity::class.java))
+                                } else {
+                                    inputField.error = "Invalid API key format"
+                                }
                             } else {
-                                inputField.error = "Invalid API key format"
+                                Safe.encryptAndStoreApiKey(myContext, "MGIyYzdmZjUtM2QxOS00MzM3LThmYTgtNDAwNTQ1ZjExYTlm")
+                                dismiss()
+                                logD("Debug API key stored")
+                                startActivity(Intent(myContext, MainActivity::class.java))
+                            }
+                        }
+                        if (BuildConfig.DEBUG) {
+                            getButton(AlertDialog.BUTTON_POSITIVE).setOnLongClickListener {
+                                Safe.encryptAndStoreApiKey(myContext, "MGIyYzdmZjUtM2QxOS00MzM3LThmYTgtNDAwNTQ1ZjExYTl")
+                                dismiss()
+                                logD("Error Debug API key stored")
+                                startActivity(Intent(myContext, MainActivity::class.java))
+                                true
                             }
                         }
                     }
                     show()
                 }
         }
+    }
+
+    private fun resetLayout() {
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.submitButton.isEnabled = true
+        binding.apiKeyButton.isEnabled = true
     }
 
     override fun onDestroyView() {

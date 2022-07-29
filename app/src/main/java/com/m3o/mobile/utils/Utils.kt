@@ -7,7 +7,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.text.Html
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -15,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.cyb3rko.m3okotlin.M3O
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import java.security.MessageDigest
@@ -31,6 +31,18 @@ internal const val REFRESH_TOKEN = "refresh_token"
 internal const val SHARED_PREFERENCE = "Safe"
 internal const val SKIP_REFRESH = "skip_refresh"
 internal const val USER_ID = "user_id"
+
+internal fun Fragment.initializeM3O() {
+    M3O.registerResponseValidation { title, message, e ->
+        e.printStackTrace()
+        logE("Ktor/Serialization error - $title: $message")
+        requireContext().showErrorDialog(title, message)
+    }
+
+    if (!M3O.isInitialized()) {
+        M3O.initialize(Safe.getAndDecryptApiKey(requireContext()))
+    }
+}
 
 internal fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, length).show()
@@ -63,12 +75,13 @@ internal fun Fragment.showDialog(title: String, message: CharSequence) {
 
 internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()
 
-internal fun Fragment.showErrorDialog(message: String?) {
-    showDialog(
-        "An Error Occured",
-        @Suppress("DEPRECATION")
-        Html.fromHtml("<b>Exception Message</b>:<br/>$message")
-    )
+internal fun Context.showErrorDialog(title: String = "", message: String) {
+    val finalTitle = if (title.isNotBlank()) "Error: $title" else "An Error Occurred"
+    showDialog(finalTitle, message)
+}
+
+internal fun Fragment.showErrorDialog(title: String = "", message: String?) {
+    requireContext().showErrorDialog(title, message.toString())
 }
 
 internal fun Fragment.hideKeyboard() {

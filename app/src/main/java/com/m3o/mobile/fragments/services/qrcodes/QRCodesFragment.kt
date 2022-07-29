@@ -21,7 +21,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.QrCodesService
 import com.m3o.mobile.databinding.FragmentServiceQrCodesBinding
 import com.m3o.mobile.utils.*
@@ -121,9 +120,7 @@ class QRCodesFragment : Fragment() {
                         input5Text.toTrimmedString()
                     )
 
-                    if (!M3O.isInitialized()) {
-                        M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-                    }
+                    initializeM3O()
                     fetchQrCode(content)
 
                     input1.error = null
@@ -254,7 +251,12 @@ class QRCodesFragment : Fragment() {
     private fun fetchQrCode(content: String) {
         lifecycleScope.launch {
             try {
-                val qrLink = QrCodesService.generate(content, 1024).qr
+                val qrLink = try {
+                    QrCodesService.generate(content, 1024).qr
+                } catch (_: Exception) {
+                    binding.progressBar.visibility = View.INVISIBLE
+                    return@launch
+                }
                 logD("QR Code URL: $qrLink")
                 storeToClipboard("QR Code URL", qrLink)
                 showToast("Copied QR Code URL")
@@ -281,7 +283,7 @@ class QRCodesFragment : Fragment() {
                             e?.printStackTrace()
                             logE("Loading QR link into ImageView failed")
                             if (e != null) {
-                                showErrorDialog(e.message)
+                                showErrorDialog(message = e.message)
                             }
                             return true
                         }
@@ -291,7 +293,7 @@ class QRCodesFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 logE("Generating QR Code failed")
-                showErrorDialog(e.message)
+                showErrorDialog(message = e.message)
             }
         }
     }

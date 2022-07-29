@@ -51,13 +51,17 @@ class AccountFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
-                    Networking.initializeAuth(Safe.getAndDecryptAccessToken(myContext))
-                    val balance = AccountService.balance(Safe.getAndDecryptUserId(myContext))
+                    Networking.initializeAuth(myContext, Safe.getAndDecryptAccessToken(myContext))
+                    val balance = try {
+                        AccountService.balance(Safe.getAndDecryptUserId(myContext))
+                    } catch (_: Exception) {
+                        binding.progressBar.visibility = View.INVISIBLE
+                        return@launch
+                    }
                     binding.balanceView.text = (balance.currentBalance.toFloat() / 1000000).toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     logE("Retrieving account balance failed")
-                    showErrorDialog(e.message)
                 }
                 binding.progressBar.visibility = View.INVISIBLE
             }

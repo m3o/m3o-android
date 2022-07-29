@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.data.CarbonResponse
 import com.cyb3rko.m3okotlin.services.CarbonService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -18,10 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceCarbonBinding
-import com.m3o.mobile.utils.CARBON_OFFSET
-import com.m3o.mobile.utils.Safe
-import com.m3o.mobile.utils.logE
-import com.m3o.mobile.utils.showErrorDialog
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 
 class CarbonFragment : Fragment() {
@@ -53,9 +49,7 @@ class CarbonFragment : Fragment() {
             binding.projectsView.visibility = View.INVISIBLE
             binding.recycler.visibility = View.INVISIBLE
 
-            if (!M3O.isInitialized()) {
-                M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-            }
+            initializeM3O()
             if (multiRequests in 0..1) {
                 singleOffset()
             } else {
@@ -76,9 +70,14 @@ class CarbonFragment : Fragment() {
         showCounter()
     }
 
-    private suspend fun offset1Kg(skipResult: Boolean = false) {
+    private suspend fun offset1Kg(skipResult: Boolean = false): Boolean {
+        var successful = false
         try {
-            val response = CarbonService.offset()
+            val response = try { CarbonService.offset() } catch (_: Exception) {
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.offsetButton.isEnabled = true
+                return false
+            }
             binding.konfettiView.start(ConfettiPresets.parade())
             increaseCounter(response.units)
             if (!skipResult) {
@@ -90,15 +89,17 @@ class CarbonFragment : Fragment() {
                 }
                 binding.recycler.visibility = View.VISIBLE
             }
+            successful = true
         } catch (e: Exception) {
             e.printStackTrace()
             logE("Purchasing 1 Kg of carbon offsets failed")
-            showErrorDialog(e.message)
+            showErrorDialog(message = e.message)
         }
         if (!skipResult) {
             binding.progressBar.visibility = View.INVISIBLE
             binding.offsetButton.isEnabled = true
         }
+        return successful
     }
 
     private fun singleOffset() = lifecycleScope.launch {
@@ -117,10 +118,15 @@ class CarbonFragment : Fragment() {
     private suspend fun multiOffset(amount: Int) {
         if (amount > 0) {
             val skipResult = amount != 1
-            offset1Kg(skipResult)
-            val finishedRequests = multiRequests - amount + 1
-            binding.multiRequestView.text = "$finishedRequests/$multiRequests Offsets"
-            multiOffset(amount - 1)
+            if (offset1Kg(skipResult)) {
+                val finishedRequests = multiRequests - amount + 1
+                binding.multiRequestView.text = "$finishedRequests/$multiRequests Offsets"
+                multiOffset(amount - 1)
+            } else {
+                binding.multiRequestView.text = ""
+                binding.progressBar.visibility = View.INVISIBLE
+                binding.offsetButton.isEnabled = true
+            }
         } else {
             binding.multiRequestView.text = ""
             binding.progressBar.visibility = View.INVISIBLE

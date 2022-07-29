@@ -1,5 +1,6 @@
 package com.m3o.mobile.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -25,7 +26,7 @@ class StartActivity : AppCompatActivity() {
             openUrl("https://discord.gg/vhBuhvYJtG")
         }
 
-        Networking.initialize()
+        Networking.initialize(this as Context)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

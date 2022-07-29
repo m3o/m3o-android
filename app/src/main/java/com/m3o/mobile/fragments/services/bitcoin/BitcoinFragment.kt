@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.BitcoinService
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentServiceBitcoinBinding
-import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.initializeM3O
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
@@ -40,9 +39,7 @@ class BitcoinFragment : Fragment() {
 
         try {
             binding.progressBar.visibility = View.VISIBLE
-            if (!M3O.isInitialized()) {
-                M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-            }
+            initializeM3O()
             fetchData()
 
             binding.refreshLayout.apply {
@@ -56,20 +53,23 @@ class BitcoinFragment : Fragment() {
             }
         } catch (e: Exception) {
             binding.progressBar.visibility = View.INVISIBLE
-            showErrorDialog(e.message)
+            showErrorDialog(message = e.message)
         }
     }
 
     private fun fetchData() {
         lifecycleScope.launch {
             try {
-                val data = BitcoinService.price().price
+                val data = try { BitcoinService.price().price } catch (_: Exception) {
+                    binding.progressBar.visibility = View.INVISIBLE
+                    return@launch
+                }
                 @SuppressLint("SetTextI18n")
                 binding.priceView.text = "$data $"
             } catch (e: Exception) {
                 e.printStackTrace()
                 logE("Fetching Bitcoin price failed")
-                showErrorDialog(e.message)
+                showErrorDialog(message = e.message)
             }
             binding.progressBar.visibility = View.INVISIBLE
         }

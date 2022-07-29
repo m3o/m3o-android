@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cyb3rko.m3okotlin.M3O
 import com.cyb3rko.m3okotlin.services.JokesService
 import com.m3o.mobile.databinding.FragmentServiceJokesBinding
-import com.m3o.mobile.utils.Safe
+import com.m3o.mobile.utils.initializeM3O
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.showErrorDialog
 import kotlinx.coroutines.launch
@@ -39,12 +38,15 @@ class JokesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.progressBar.visibility = View.VISIBLE
-        if (!M3O.isInitialized()) {
-            M3O.initialize(Safe.getAndDecryptApiKey(myContext))
-        }
+        initializeM3O()
         lifecycleScope.launch {
             try {
-                val data = JokesService.random(10).jokes
+                val data = try {
+                    JokesService.random(10).jokes
+                } catch (_: Exception) {
+                    binding.progressBar.visibility = View.INVISIBLE
+                    return@launch
+                }
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
                     adapter = JokesAdapter(data) {
@@ -60,7 +62,7 @@ class JokesFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 logE("Fetching and showing Jokes failed")
-                showErrorDialog(e.message)
+                showErrorDialog(message = e.message)
             }
             binding.progressBar.visibility = View.INVISIBLE
         }

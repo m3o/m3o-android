@@ -1,5 +1,6 @@
 package com.m3o.mobile.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {
                 val accessToken = Safe.getAndDecryptAccessToken(applicationContext)
                 if (accessToken != "") {
-                    Networking.initializeAuth(accessToken)
+                    Networking.initializeAuth(this as Context, accessToken)
                     lifecycleScope.launch {
                         try {
                             LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))
