@@ -14,9 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.databinding.FragmentServiceUrlsBinding
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetEdit
 import com.m3o.mobile.fragments.services.urls.bottomsheets.URLsBottomSheetNew
-import com.m3o.mobile.utils.initializeM3O
-import com.m3o.mobile.utils.logE
-import com.m3o.mobile.utils.showErrorDialog
+import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 
 class URLsFragment : Fragment() {
@@ -41,7 +39,7 @@ class URLsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeM3O()
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
         lifecycleScope.launch {
             fetchData()
         }
@@ -49,7 +47,7 @@ class URLsFragment : Fragment() {
         binding.fab.setOnClickListener {
             val bottomSheet = URLsBottomSheetNew {
                 lifecycleScope.launch {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.show()
                     UrlService.shorten(it)
                     fetchData()
                 }
@@ -60,10 +58,10 @@ class URLsFragment : Fragment() {
 
     private suspend fun fetchData() {
         try {
-            binding.animationView.visibility = View.GONE
-            binding.emptyTextView.visibility = View.GONE
+            binding.animationView.hide()
+            binding.emptyTextView.hide()
             val data = try { UrlService.list().urlPairs } catch (_: Exception) {
-                binding.progressBar.visibility = View.INVISIBLE
+                binding.progressBar.hide()
                 return
             }
             if (data.isNotEmpty()) {
@@ -76,7 +74,7 @@ class URLsFragment : Fragment() {
                             val bottomSheet = URLsBottomSheetEdit(oldDestinationUrl) {
                                 if (oldDestinationUrl != it) {
                                     lifecycleScope.launch {
-                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.progressBar.show()
                                         UrlService.update(it, id)
                                         fetchData()
                                     }
@@ -90,7 +88,7 @@ class URLsFragment : Fragment() {
                                 .setMessage("Are you sure you want to delete this short URL?\n\n$it")
                                 .setPositiveButton("Yes") { _, _ ->
                                     lifecycleScope.launch {
-                                        binding.progressBar.visibility = View.VISIBLE
+                                        binding.progressBar.show()
                                         UrlService.delete(shortUrl = it)
                                         fetchData()
                                     }
@@ -98,18 +96,19 @@ class URLsFragment : Fragment() {
                                 .show()
                         }
                     )
+                    show()
                 }
             } else {
                 binding.recycler.visibility = View.GONE
-                binding.animationView.visibility = View.VISIBLE
-                binding.emptyTextView.visibility = View.VISIBLE
+                binding.animationView.show()
+                binding.emptyTextView.show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
             logE("Fetching and showing URLs failed")
             showErrorDialog(message = e.message)
         }
-        binding.progressBar.visibility = View.INVISIBLE
+        binding.progressBar.hide()
     }
 
     override fun onDestroyView() {

@@ -37,14 +37,14 @@ class JokesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
         initializeM3O()
         lifecycleScope.launch {
             try {
                 val data = try {
                     JokesService.random(10).jokes
                 } catch (_: Exception) {
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.hide()
                     return@launch
                 }
                 binding.recycler.apply {
@@ -64,7 +64,7 @@ class JokesFragment : Fragment() {
                 logE("Fetching and showing Jokes failed")
                 showErrorDialog(message = e.message)
             }
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
         }
     }
 

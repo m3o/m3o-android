@@ -38,7 +38,7 @@ class BitcoinFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         try {
-            binding.progressBar.visibility = View.VISIBLE
+            binding.progressBar.show()
             initializeM3O()
             fetchData()
 
@@ -46,13 +46,13 @@ class BitcoinFragment : Fragment() {
                 setProgressBackgroundColorSchemeResource(R.color.refreshLayoutBackground)
                 setColorSchemeResources(R.color.refreshLayoutArrow)
                 setOnRefreshListener {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.show()
                     isRefreshing = false
                     fetchData()
                 }
             }
         } catch (e: Exception) {
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
             showErrorDialog(message = e.message)
         }
     }
@@ -61,7 +61,7 @@ class BitcoinFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val data = try { BitcoinService.price().price } catch (_: Exception) {
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.hide()
                     return@launch
                 }
                 @SuppressLint("SetTextI18n")
@@ -71,7 +71,7 @@ class BitcoinFragment : Fragment() {
                 logE("Fetching Bitcoin price failed")
                 showErrorDialog(message = e.message)
             }
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
         }
     }
 

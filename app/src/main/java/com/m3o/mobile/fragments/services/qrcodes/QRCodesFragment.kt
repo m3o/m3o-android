@@ -99,7 +99,7 @@ class QRCodesFragment : Fragment() {
                         setInputsVisibility(true)
                     }
                 }
-                generateButton.visibility = View.VISIBLE
+                generateButton.show()
             }
         }
 
@@ -107,7 +107,7 @@ class QRCodesFragment : Fragment() {
             hideKeyboard()
             binding.apply {
                 if (regexMatch()) {
-                    progressBar.visibility = View.VISIBLE
+                    progressBar.show()
                     logD("QR Code content: $content")
                     filled = false
                     binding.imageView.setImageDrawable(getServiceIcon(myContext, getSvg()))
@@ -141,10 +141,10 @@ class QRCodesFragment : Fragment() {
 
         binding.imageView.setOnClickListener {
             if (filled) {
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.show()
                 val bitmap = binding.imageView.drawable.toBitmap()
                 saveImage(bitmap)
-                binding.progressBar.visibility = View.GONE
+                binding.progressBar.hide()
             }
         }
     }
@@ -254,7 +254,7 @@ class QRCodesFragment : Fragment() {
                 val qrLink = try {
                     QrCodesService.generate(content, 1024).qr
                 } catch (_: Exception) {
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.hide()
                     return@launch
                 }
                 logD("QR Code URL: $qrLink")
@@ -270,7 +270,7 @@ class QRCodesFragment : Fragment() {
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            binding.progressBar.visibility = View.GONE
+                            binding.progressBar.hide()
                             return false
                         }
 
@@ -289,7 +289,7 @@ class QRCodesFragment : Fragment() {
                         }
                     })
                     .into(binding.imageView)
-                binding.progressBar.visibility = View.GONE
+                binding.progressBar.hide()
             } catch (e: Exception) {
                 e.printStackTrace()
                 logE("Generating QR Code failed")

@@ -32,34 +32,28 @@ internal const val SHARED_PREFERENCE = "Safe"
 internal const val SKIP_REFRESH = "skip_refresh"
 internal const val USER_ID = "user_id"
 
-internal fun Fragment.initializeM3O() {
-    M3O.registerResponseValidation { title, message, e ->
-        e.printStackTrace()
-        logE("Ktor/Serialization error - $title: $message")
-        requireContext().showErrorDialog(title, message)
-    }
+// For different classes
 
-    if (!M3O.isInitialized()) {
-        M3O.initialize(Safe.getAndDecryptApiKey(requireContext()))
-    }
+internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()
+
+internal fun View.hide() {
+    this.visibility = View.INVISIBLE
 }
+
+internal fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+// For Context class
 
 internal fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, length).show()
 }
 
-internal fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
-    requireContext().showToast(message, length)
-}
-
 internal fun Context.storeToClipboard(label: String, text: String) {
     val clip = ClipData.newPlainText(label, text)
-    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+    (this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
         .setPrimaryClip(clip)
-}
-
-internal fun Fragment.storeToClipboard(label: String, text: String) {
-    requireContext().storeToClipboard(label, text)
 }
 
 internal fun Context.showDialog(title: String, message: CharSequence) {
@@ -69,23 +63,62 @@ internal fun Context.showDialog(title: String, message: CharSequence) {
         .show()
 }
 
-internal fun Fragment.showDialog(title: String, message: CharSequence) {
-    requireContext().showDialog(title, message)
-}
-
-internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()
-
 internal fun Context.showErrorDialog(title: String = "", message: String) {
     val finalTitle = if (title.isNotBlank()) "Error: $title" else "An Error Occurred"
-    showDialog(finalTitle, message)
+    this.showDialog(finalTitle, message)
+}
+
+internal fun Context.openUrl(url: String) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        this.startActivity(intent)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        this.storeToClipboard("URL", url)
+        this.showToast("Opening URL failed, copied URL instead", Toast.LENGTH_LONG)
+    }
+}
+
+internal fun Context.getStringArray(id: Int) = this.resources.getStringArray(id)
+
+// For Fragment class
+
+internal fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
+    this.requireContext().showToast(message, length)
+}
+
+internal fun Fragment.storeToClipboard(label: String, text: String) {
+    this.requireContext().storeToClipboard(label, text)
+}
+
+internal fun Fragment.showDialog(title: String, message: CharSequence) {
+    this.requireContext().showDialog(title, message)
 }
 
 internal fun Fragment.showErrorDialog(title: String = "", message: String?) {
-    requireContext().showErrorDialog(title, message.toString())
+    this.requireContext().showErrorDialog(title, message.toString())
+}
+
+internal fun Fragment.openUrl(url: String) {
+    this.requireContext().openUrl(url)
+}
+
+internal fun Fragment.getStringArray(id: Int) = this.requireContext().getStringArray(id)
+
+internal fun Fragment.initializeM3O() {
+    M3O.registerResponseValidation { title, message, e ->
+        e.printStackTrace()
+        logE("Ktor/Serialization error - $title: $message")
+        this.requireContext().showErrorDialog(title, message)
+    }
+
+    if (!M3O.isInitialized()) {
+        M3O.initialize(Safe.getAndDecryptApiKey(this.requireContext()))
+    }
 }
 
 internal fun Fragment.hideKeyboard() {
-    val activity = requireActivity()
+    val activity = this.requireActivity()
     val imm = activity.getSystemService(
         AppCompatActivity.INPUT_METHOD_SERVICE
     ) as InputMethodManager
@@ -95,25 +128,6 @@ internal fun Fragment.hideKeyboard() {
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
-
-internal fun Context.openUrl(url: String) {
-    try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        storeToClipboard("URL", url)
-        showToast("Opening URL failed, copied URL instead", Toast.LENGTH_LONG)
-    }
-}
-
-internal fun Fragment.openUrl(url: String) {
-    requireContext().openUrl(url)
-}
-
-internal fun Context.getStringArray(id: Int) = this.resources.getStringArray(id)
-
-internal fun Fragment.getStringArray(id: Int) = requireContext().getStringArray(id)
 
 internal fun logD(message: String) = Log.d(LOG_APP_ID, message)
 

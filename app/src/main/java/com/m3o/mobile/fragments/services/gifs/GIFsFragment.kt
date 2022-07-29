@@ -46,7 +46,7 @@ class GIFsFragment : Fragment() {
         binding.gifSearchInputText.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 hideKeyboard()
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.show()
                 initializeM3O()
 
                 val search = binding.gifSearchInputText.text.toString()
@@ -55,7 +55,7 @@ class GIFsFragment : Fragment() {
                         val data = try {
                             GIFsService.search(search, 20).data
                         } catch (_: Exception) {
-                            binding.progressBar.visibility = View.INVISIBLE
+                            binding.progressBar.hide()
                             return@launch
                         }
                         if (data != null) {
@@ -87,13 +87,13 @@ class GIFsFragment : Fragment() {
 //                            startActivity(chooser)
                             }
                         }
-                        binding.progressBar.visibility = View.INVISIBLE
+
                     } catch (e: Exception) {
                         e.printStackTrace()
                         logE("Retrieving and showing GIFs failed")
-                        binding.progressBar.visibility = View.INVISIBLE
                         showErrorDialog(message = e.message)
                     }
+                    binding.progressBar.hide()
                 }
 
                 return@setOnKeyListener true

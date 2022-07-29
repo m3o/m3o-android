@@ -47,16 +47,16 @@ class AccountFragment : Fragment() {
 
         if (email.isNotEmpty()) {
             binding.emailView.text = email
-            binding.balanceCard.visibility = View.VISIBLE
-            binding.emailCard.visibility = View.VISIBLE
-            binding.progressBar.visibility = View.VISIBLE
+            binding.balanceCard.show()
+            binding.emailCard.show()
+            binding.progressBar.show()
             lifecycleScope.launch {
                 try {
                     Networking.initializeAuth(myContext, Safe.getAndDecryptAccessToken(myContext))
                     val balance = try {
                         AccountService.balance(Safe.getAndDecryptUserId(myContext))
                     } catch (_: Exception) {
-                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.progressBar.hide()
                         return@launch
                     }
                     binding.balanceView.text = (balance.currentBalance.toFloat() / 1000000).toString()
@@ -64,7 +64,7 @@ class AccountFragment : Fragment() {
                     e.printStackTrace()
                     logE("Retrieving account balance failed")
                 }
-                binding.progressBar.visibility = View.INVISIBLE
+                binding.progressBar.hide()
             }
         }
 
@@ -83,8 +83,8 @@ class AccountFragment : Fragment() {
                         WindowManager.LayoutParams.FLAG_SECURE
                     )
                     setApiCardClickListener(apiCardClickShownListener)
-                    binding.keyViewHidden.visibility = View.INVISIBLE
-                    binding.keyView.visibility = View.VISIBLE
+                    binding.keyViewHidden.hide()
+                    binding.keyView.show()
                     binding.keyView.text = Safe.getAndDecryptApiKey(myContext)
 
                     val timerHandler = Handler(Looper.getMainLooper())
@@ -141,8 +141,8 @@ class AccountFragment : Fragment() {
 
     private fun resetApiCard() {
         if (_binding != null) {
-            binding.keyViewHidden.visibility = View.VISIBLE
-            binding.keyView.visibility = View.INVISIBLE
+            binding.keyViewHidden.show()
+            binding.keyView.hide()
             binding.timerView.text = ""
             binding.keyView.text = ""
             setApiCardClickListener()

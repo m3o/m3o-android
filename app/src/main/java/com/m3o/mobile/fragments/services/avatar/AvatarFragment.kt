@@ -55,10 +55,10 @@ class AvatarFragment : Fragment() {
         binding.usernameInputText.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 hideKeyboard()
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.show()
                 binding.avatarView.setImageDrawable(getServiceIcon(myContext, getSvg()))
-                binding.saveButton.visibility = View.INVISIBLE
-                binding.shareButton.visibility = View.INVISIBLE
+                binding.saveButton.hide()
+                binding.shareButton.hide()
 
                 initializeM3O()
                 avatarName = binding.usernameInputText.text.toString().trim()
@@ -77,7 +77,7 @@ class AvatarFragment : Fragment() {
                                 avatarName
                             )
                         } catch (_: Exception) {
-                            binding.progressBar.visibility = View.INVISIBLE
+                            binding.progressBar.hide()
                             return@launch
                         }
 
@@ -89,14 +89,14 @@ class AvatarFragment : Fragment() {
                             decodedString.size
                         )
                         binding.avatarView.setImageBitmap(avatar)
-                        binding.saveButton.visibility = View.VISIBLE
-                        binding.shareButton.visibility = View.VISIBLE
+                        binding.saveButton.show()
+                        binding.shareButton.show()
                     } catch (e: Exception) {
                         e.printStackTrace()
                         logE("Loading avatar failed")
                         showErrorDialog(message = e.message)
                     }
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.hide()
                 }
                 return@OnKeyListener true
             }

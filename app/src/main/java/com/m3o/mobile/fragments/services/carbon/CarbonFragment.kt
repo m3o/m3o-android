@@ -45,9 +45,9 @@ class CarbonFragment : Fragment() {
 
         binding.offsetButton.setOnClickListener {
             binding.offsetButton.isEnabled = false
-            binding.progressBar.visibility = View.VISIBLE
-            binding.projectsView.visibility = View.INVISIBLE
-            binding.recycler.visibility = View.INVISIBLE
+            binding.progressBar.show()
+            binding.projectsView.hide()
+            binding.recycler.hide()
 
             initializeM3O()
             if (multiRequests in 0..1) {
@@ -74,7 +74,7 @@ class CarbonFragment : Fragment() {
         var successful = false
         try {
             val response = try { CarbonService.offset() } catch (_: Exception) {
-                binding.progressBar.visibility = View.INVISIBLE
+                binding.progressBar.hide()
                 binding.offsetButton.isEnabled = true
                 return false
             }
@@ -82,12 +82,12 @@ class CarbonFragment : Fragment() {
             increaseCounter(response.units)
             if (!skipResult) {
                 data = response.projects
-                binding.projectsView.visibility = View.VISIBLE
+                binding.projectsView.show()
                 binding.recycler.apply {
                     layoutManager = LinearLayoutManager(myContext)
                     adapter = CarbonAdapter(data)
                 }
-                binding.recycler.visibility = View.VISIBLE
+                binding.recycler.show()
             }
             successful = true
         } catch (e: Exception) {
@@ -96,7 +96,7 @@ class CarbonFragment : Fragment() {
             showErrorDialog(message = e.message)
         }
         if (!skipResult) {
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
             binding.offsetButton.isEnabled = true
         }
         return successful
@@ -124,12 +124,12 @@ class CarbonFragment : Fragment() {
                 multiOffset(amount - 1)
             } else {
                 binding.multiRequestView.text = ""
-                binding.progressBar.visibility = View.INVISIBLE
+                binding.progressBar.hide()
                 binding.offsetButton.isEnabled = true
             }
         } else {
             binding.multiRequestView.text = ""
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
             binding.offsetButton.isEnabled = true
         }
     }

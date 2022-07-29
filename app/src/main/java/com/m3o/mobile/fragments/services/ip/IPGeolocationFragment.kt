@@ -43,7 +43,7 @@ class IPGeolocationFragment : Fragment() {
         binding.ipAddressInputText.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 hideKeyboard()
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressBar.show()
                 initializeM3O()
 
                 val ip = binding.ipAddressInputText.text.toString()
@@ -52,7 +52,7 @@ class IPGeolocationFragment : Fragment() {
                         val data = try {
                             IpGeolocationService.lookup(ip)
                         } catch (_: Exception) {
-                            binding.progressBar.visibility = View.INVISIBLE
+                            binding.progressBar.hide()
                             return@launch
                         }
                         var output = mutableListOf<Pair<String, String>>()
@@ -86,7 +86,7 @@ class IPGeolocationFragment : Fragment() {
                         logE("Looking up IP and showing results failed")
                         showErrorDialog(message = e.message)
                     }
-                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.progressBar.hide()
                 }
                 return@setOnKeyListener true
             }

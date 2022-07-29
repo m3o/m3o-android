@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
 
             binding.submitButton.isEnabled = false
             binding.apiKeyButton.isEnabled = false
-            binding.progressBar.visibility = View.VISIBLE
+            binding.progressBar.show()
 
             lifecycleScope.launch {
                 try {
@@ -163,7 +163,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun resetLayout() {
-        binding.progressBar.visibility = View.INVISIBLE
+        binding.progressBar.hide()
         binding.submitButton.isEnabled = true
         binding.apiKeyButton.isEnabled = true
     }

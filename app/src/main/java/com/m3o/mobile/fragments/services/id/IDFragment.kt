@@ -52,7 +52,7 @@ class IDFragment : Fragment() {
     }
 
     private fun fetchId(checkedButtonId: Int) {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
         initializeM3O()
         lifecycleScope.launch {
             val idType = when (checkedButtonId) {
@@ -88,7 +88,7 @@ class IDFragment : Fragment() {
                     val idResponse = try {
                         IdService.generate(idType.typeName)
                     } catch (_: Exception) {
-                        binding.progressBar.visibility = View.INVISIBLE
+                        binding.progressBar.hide()
                         return@launch
                     }
                     if (idType.typeName == idResponse.type) {
@@ -106,7 +106,7 @@ class IDFragment : Fragment() {
                 logE("Invalid ID type chosen")
                 showErrorDialog()
             }
-            binding.progressBar.visibility = View.INVISIBLE
+            binding.progressBar.hide()
         }
     }
 
