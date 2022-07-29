@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.cyb3rko.m3okotlin.M3O
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.m3o.mobile.activities.StartActivity
 import com.m3o.mobile.api.AccountService
@@ -127,6 +128,8 @@ class AccountFragment : Fragment() {
             logD("User Id cleared")
             Safe.encryptAndStoreApiKey(myContext, "")
             logD("API Key cleared")
+            M3O.terminate()
+            logD("M3O Client terminated")
             requireActivity().finish()
             startActivity(Intent(myContext, StartActivity::class.java))
         }
