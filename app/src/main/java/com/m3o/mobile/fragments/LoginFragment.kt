@@ -141,7 +141,7 @@ class LoginFragment : Fragment() {
                                     inputField.error = "Invalid API key format"
                                 }
                             } else {
-                                Safe.encryptAndStoreApiKey(myContext, "MGIyYzdmZjUtM2QxOS00MzM3LThmYTgtNDAwNTQ1ZjExYTlm")
+                                Safe.encryptAndStoreApiKey(myContext, getString(R.string.debug_api_key))
                                 dismiss()
                                 logD("Debug API key stored")
                                 startActivity(Intent(myContext, MainActivity::class.java))
@@ -149,7 +149,7 @@ class LoginFragment : Fragment() {
                         }
                         if (BuildConfig.DEBUG) {
                             getButton(AlertDialog.BUTTON_POSITIVE).setOnLongClickListener {
-                                Safe.encryptAndStoreApiKey(myContext, "MGIyYzdmZjUtM2QxOS00MzM3LThmYTgtNDAwNTQ1ZjExYTl")
+                                Safe.encryptAndStoreApiKey(myContext, "")
                                 dismiss()
                                 logD("Error Debug API key stored")
                                 startActivity(Intent(myContext, MainActivity::class.java))

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
+    def Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
     signingConfigs {
         signingConf {
-            Properties properties = new Properties()
-            properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
             storeFile file(properties.getProperty("signing.file"))
             storePassword properties.getProperty("signing.password")
             keyAlias properties.getProperty("signing.key.alias")
@@ -33,12 +33,16 @@ android {
             minifyEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            resValue "string", "debug_api_key", properties.getProperty("debug.api.key", "")
         }
         release {
             minifyEnabled true
             shrinkResources true
             signingConfig signingConfigs.signingConf
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            resValue "string", "debug_api_key", ""
         }
     }
     compileOptions {
