@@ -25,7 +25,6 @@ import com.m3o.mobile.utils.*
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 
 class AvatarFragment : Fragment() {
 
@@ -112,12 +111,7 @@ class AvatarFragment : Fragment() {
                 } else {
                     Bitmap.CompressFormat.PNG
                 }
-                val imageType2 = if (binding.jpegButton.isChecked) {
-                    "jpeg"
-                } else {
-                    "png"
-                }
-                saveAvatar(imageType, imageType2)
+                saveAvatar(imageType)
             }
         }
 
@@ -189,48 +183,68 @@ class AvatarFragment : Fragment() {
         return file
     }
 
-    private fun saveAvatar(format: Bitmap.CompressFormat, format2: String) {
-        val fileName = "avatar_$avatarName.$format2"
-        val out: OutputStream?
+    private fun saveAvatar(imageType: Bitmap.CompressFormat) {
+        val fileName = "avatar_$avatarName.${imageType.name}"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val path = File(Environment.DIRECTORY_PICTURES, "M3O").toString()
-            val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/$format2")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, path)
-            }
-            val uri = myContext.contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-
-            if (uri != null) {
-                out = myContext.contentResolver.openOutputStream(uri)
-            } else {
-                out = null
-            }
+            saveAvatarSinceQ(fileName, imageType)
         } else {
-            val path = File(
-                Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES
-                ).toString(),
-                "M3O"
-            )
-            val file = File(path, fileName)
-            out = FileOutputStream(file)
+            executeWithFileAccess("save the avatar") {
+                saveAvatarBelowQ(fileName, imageType)
+            }
         }
+    }
 
-        if (out != null) {
-            try {
+    private fun saveAvatarSinceQ(fileName: String, format: Bitmap.CompressFormat) {
+        val path = File(Environment.DIRECTORY_PICTURES, "M3O").toString()
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name}")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, path)
+        }
+        val uri = myContext.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+
+        try {
+            val out = if (uri != null) {
+                myContext.contentResolver.openOutputStream(uri)
+            } else {
+                null
+            }
+            if (out != null) {
                 avatar.compress(format, 100, out)
                 out.close()
                 showToast("Avatar saved to gallery")
-            } catch (e: Exception) {
-                e.printStackTrace()
-                val errorMessage = "Saving avatar failed"
-                logE(errorMessage)
-                showToast(errorMessage)
-            }
+            } else throw Exception("Output stream is null, saving avatar not possible")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val errorMessage = "Saving avatar failed"
+            logE(errorMessage)
+            showToast(errorMessage)
+        }
+    }
+
+    private fun saveAvatarBelowQ(fileName: String, format: Bitmap.CompressFormat) {
+        val path = File(
+            Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+            ), "M3O"
+        )
+
+        try {
+            if (!path.exists()) path.mkdirs()
+            val file = File(path, fileName)
+            file.createNewFile()
+            val out = FileOutputStream(file)
+            avatar.compress(format, 100, out)
+            out.close()
+            showToast("Avatar saved to gallery")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val errorMessage = "Saving avatar failed"
+            logE(errorMessage)
+            showToast(errorMessage)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.m3o.mobile.utils
 
+import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.cyb3rko.m3okotlin.M3O
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import permissions.dispatcher.ktx.constructPermissionsRequest
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -127,6 +129,22 @@ internal fun Fragment.hideKeyboard() {
         view = View(activity)
     }
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+internal fun Fragment.executeWithFileAccess(description: String, onGiven: () -> Unit) {
+    this.constructPermissionsRequest(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        onShowRationale = { it.proceed() },
+        onPermissionDenied = {
+            showDialog("Permission required", "The permission is required to $description.")
+        },
+        onNeverAskAgain = {
+            val message = "The permission is required to $description. Allow it via the device settings."
+            showDialog("Permission required", message)
+        }
+    ) {
+        onGiven()
+    }.launch()
 }
 
 internal fun logD(message: String) = Log.d(LOG_APP_ID, message)

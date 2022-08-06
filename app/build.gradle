@@ -73,6 +73,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
+    implementation 'com.github.permissions-dispatcher:ktx:1.1.4'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'

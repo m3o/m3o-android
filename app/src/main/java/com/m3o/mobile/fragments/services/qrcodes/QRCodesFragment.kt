@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonNull.content
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 import kotlin.random.Random
 
 class QRCodesFragment : Fragment() {
@@ -300,47 +299,66 @@ class QRCodesFragment : Fragment() {
 
     private fun saveImage(bitmap: Bitmap) {
         val fileName = "qr-code-${Random.nextInt(1, 999999)}.png"
-        val out: OutputStream?
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val path = File(Environment.DIRECTORY_PICTURES, "M3O").toString()
-            val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, path)
-            }
-            val uri = myContext.contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-
-            if (uri != null) {
-                out = myContext.contentResolver.openOutputStream(uri)
-            } else {
-                out = null
-            }
+            saveImageSinceQ(fileName, bitmap)
         } else {
-            val path = File(
-                Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES
-                ).toString(),
-                "M3O"
-            )
-            val file = File(path, fileName)
-            out = FileOutputStream(file)
+            executeWithFileAccess("save the QR code") {
+                saveImageBelowQ(fileName, bitmap)
+            }
         }
+    }
 
-        if (out != null) {
-            try {
+    private fun saveImageSinceQ(fileName: String, bitmap: Bitmap) {
+        val path = File(Environment.DIRECTORY_PICTURES, "M3O").toString()
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, path)
+        }
+        val uri = myContext.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+
+        try {
+            val out = if (uri != null) {
+                myContext.contentResolver.openOutputStream(uri)
+            } else {
+                null
+            }
+            if (out != null) {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
                 out.close()
                 showToast("QR code saved to gallery")
-            } catch (e: Exception) {
-                e.printStackTrace()
-                val errorMessage = "Saving QR code failed"
-                logE(errorMessage)
-                showToast(errorMessage)
-            }
+            } else throw Exception("Output stream is null, saving QR code not possible")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val errorMessage = "Saving QR code failed"
+            logE(errorMessage)
+            showToast(errorMessage)
+        }
+    }
+
+    private fun saveImageBelowQ(fileName: String, bitmap: Bitmap) {
+        val path = File(
+            Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+            ), "M3O"
+        )
+
+        try {
+            if (!path.exists()) path.mkdirs()
+            val file = File(path, fileName)
+            file.createNewFile()
+            val out = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            out.close()
+            showToast("QR code saved to gallery")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val errorMessage = "Saving QR code failed"
+            logE(errorMessage)
+            showToast(errorMessage)
         }
     }
 
