@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonNull.content
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.random.Random
 
 class QRCodesFragment : Fragment() {
     private var _binding: FragmentServiceQrCodesBinding? = null
@@ -298,7 +297,7 @@ class QRCodesFragment : Fragment() {
     }
 
     private fun saveImage(bitmap: Bitmap) {
-        val fileName = "qr-code-${Random.nextInt(1, 999999)}.png"
+        val fileName = "qr-code-${System.currentTimeMillis()}.png"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             saveImageSinceQ(fileName, bitmap)
         } else {
