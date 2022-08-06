@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
             if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {
                 val accessToken = Safe.getAndDecryptAccessToken(applicationContext)
                 if (accessToken != "") {
-                    Networking.initializeAuth(this as Context, accessToken)
+                    if (!Networking.isAuthInitialized()) {
+                        Networking.initializeAuth(this as Context, accessToken)
+                    }
                     lifecycleScope.launch {
                         try {
                             LoginService.refresh(Safe.getKey(applicationContext, REFRESH_TOKEN))

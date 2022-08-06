@@ -52,7 +52,9 @@ class AccountFragment : Fragment() {
             binding.progressBar.show()
             lifecycleScope.launch {
                 try {
-                    Networking.initializeAuth(myContext, Safe.getAndDecryptAccessToken(myContext))
+                    if (!Networking.isAuthInitialized()) {
+                        Networking.initializeAuth(myContext, Safe.getAndDecryptAccessToken(myContext))
+                    }
                     val balance = try {
                         AccountService.balance(Safe.getAndDecryptUserId(myContext))
                     } catch (_: Exception) {

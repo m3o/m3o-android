@@ -1,13 +1,11 @@
 package com.m3o.mobile.activities
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.m3o.mobile.R
-import com.m3o.mobile.api.Networking
 import com.m3o.mobile.databinding.ActivityStartBinding
 import com.m3o.mobile.utils.openUrl
 
@@ -25,8 +23,6 @@ class StartActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             openUrl("https://discord.gg/vhBuhvYJtG")
         }
-
-        Networking.initialize(this as Context)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

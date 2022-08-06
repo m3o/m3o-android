@@ -11,6 +11,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -85,6 +86,18 @@ object Networking {
                 }
             }
         }
+    }
+
+    fun isInitialized(): Boolean {
+        return if (::ktorHttpClient.isInitialized) {
+            ktorHttpClient.engine.isActive
+        } else false
+    }
+
+    fun isAuthInitialized(): Boolean {
+        return if (::ktorHttpAuthClient.isInitialized) {
+            ktorHttpAuthClient.engine.isActive
+        } else false
     }
 
     fun getUrl(tail: String) = "$BASE_URL$tail"

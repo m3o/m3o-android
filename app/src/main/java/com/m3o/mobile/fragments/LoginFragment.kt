@@ -66,6 +66,9 @@ class LoginFragment : Fragment() {
 
             lifecycleScope.launch {
                 try {
+                    if (!Networking.isInitialized()) {
+                        Networking.initialize(myContext)
+                    }
                     val token = try {
                         LoginService.login(email, password).token
                     } catch (_: Exception) {
@@ -83,7 +86,9 @@ class LoginFragment : Fragment() {
                     Safe.storeKey(myContext, REFRESH_TOKEN, refreshToken)
                     logD("Access and refresh tokens stored")
 
-                    Networking.initializeAuth(myContext, accessToken)
+                    if (!Networking.isAuthInitialized()) {
+                        Networking.initializeAuth(myContext, accessToken)
+                    }
                     val userId = try {
                         AccountService.read(email, password).customer.id
                     } catch (_: Exception) {
