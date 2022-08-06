@@ -34,6 +34,8 @@ internal const val SHARED_PREFERENCE = "Safe"
 internal const val SKIP_REFRESH = "skip_refresh"
 internal const val USER_ID = "user_id"
 
+internal const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.m3o.mobile"
+
 // For different classes
 
 internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()
@@ -58,11 +60,22 @@ internal fun Context.storeToClipboard(label: String, text: String) {
         .setPrimaryClip(clip)
 }
 
-internal fun Context.showDialog(title: String, message: CharSequence) {
-    MaterialAlertDialogBuilder(this)
+internal fun Context.showDialog(
+    title: String,
+    message: CharSequence,
+    action: () -> Unit = {},
+    actionMessage: String = ""
+) {
+    val builder = MaterialAlertDialogBuilder(this)
         .setTitle(title)
         .setMessage(message)
-        .show()
+
+    if (actionMessage.isNotBlank()) {
+        builder.setPositiveButton(actionMessage) { _, _ ->
+            action()
+        }
+    }
+    builder.show()
 }
 
 internal fun Context.showErrorDialog(title: String = "", message: String) {
@@ -93,8 +106,13 @@ internal fun Fragment.storeToClipboard(label: String, text: String) {
     this.requireContext().storeToClipboard(label, text)
 }
 
-internal fun Fragment.showDialog(title: String, message: CharSequence) {
-    this.requireContext().showDialog(title, message)
+internal fun Fragment.showDialog(
+    title: String,
+    message: CharSequence,
+    action: () -> Unit = {},
+    actionMessage: String = ""
+) {
+    this.requireContext().showDialog(title, message, action, actionMessage)
 }
 
 internal fun Fragment.showErrorDialog(title: String = "", message: String?) {
