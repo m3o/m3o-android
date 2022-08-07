@@ -7,17 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.m3o.mobile.BuildConfig
 import com.m3o.mobile.R
 import com.m3o.mobile.databinding.FragmentStartBinding
-import com.m3o.mobile.security.tamperdetection.Result
-import com.m3o.mobile.security.tamperdetection.guardDebugger
-import com.m3o.mobile.security.tamperdetection.validateSignature
-import com.m3o.mobile.security.tamperdetection.verifyInstaller
-import com.m3o.mobile.utils.logD
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.openUrl
 import com.m3o.mobile.utils.showDialog
+import com.mukesh.tamperdetector.*
 
 class StartFragment : Fragment() {
     private var _binding: FragmentStartBinding? = null
@@ -44,22 +39,17 @@ class StartFragment : Fragment() {
             openUrl("https://m3o.com/register")
         }
 
-        if (!BuildConfig.DEBUG && BuildConfig.BUILD_TYPE == "release") {
-            val verifiedInstaller = myContext.verifyInstaller()
-            if (verifiedInstaller != null && verifiedInstaller) {
-                guardDebugger({
-                    showDebuggerError()
-                }, {
-                    if (myContext.validateSignature("2Ryd2L8HfPXSr9l0YPKQHr1ijSQ=") == Result.VALID) {
-                        enableLoginButton()
-                    } else showWrongSignatureError()
-                })
-            } else {
-                showWrongInstallerError()
-            }
+        val verifiedInstaller = myContext.verifyInstaller(Installer.GOOGLE_PLAY_STORE)
+        if (verifiedInstaller != null && verifiedInstaller) {
+            guardDebugger({
+                showDebuggerError()
+            }, {
+                if (myContext.validateSignature("2Ryd2L8HfPXSr9l0YPKQHr1ijSQ=") == Result.VALID) {
+                    enableLoginButton()
+                } else showWrongSignatureError()
+            })
         } else {
-            logD("Debug / non-release config, skipping app validation.")
-            enableLoginButton()
+            showWrongInstallerError()
         }
     }
 
