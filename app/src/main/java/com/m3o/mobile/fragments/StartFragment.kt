@@ -12,7 +12,9 @@ import com.m3o.mobile.databinding.FragmentStartBinding
 import com.m3o.mobile.utils.logE
 import com.m3o.mobile.utils.openUrl
 import com.m3o.mobile.utils.showDialog
-import com.mukesh.tamperdetector.*
+import com.mukesh.tamperdetector.Installer
+import com.mukesh.tamperdetector.guardDebugger
+import com.mukesh.tamperdetector.verifyInstaller
 
 class StartFragment : Fragment() {
     private var _binding: FragmentStartBinding? = null
@@ -44,9 +46,7 @@ class StartFragment : Fragment() {
             guardDebugger({
                 showDebuggerError()
             }, {
-                if (myContext.validateSignature("2Ryd2L8HfPXSr9l0YPKQHr1ijSQ=") == Result.VALID) {
-                    enableLoginButton()
-                } else showWrongSignatureError()
+                enableLoginButton()
             })
         } else {
             showWrongInstallerError()
@@ -77,17 +77,6 @@ class StartFragment : Fragment() {
         showDialog(
             "Insecure App Access",
             "An app debugger was found.\nDeactive it and restart the app."
-        )
-    }
-
-    private fun showWrongSignatureError() {
-        logE("Insecure App Access: Wrong app signature found, disallowing app usage.")
-        showDialog(
-            "Insecure App Access",
-            "The app version you are using has an invalid signature. Uninstall the app from your " +
-                    "device and install the app from the Google Play Store (again).",
-            { openUrl(getString(R.string.about_play_store_link)) },
-            "Download"
         )
     }
 
