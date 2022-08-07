@@ -69,12 +69,6 @@
         android:label="IP Geolocation" />
 
     <fragment
-        android:id="@+id/JokesFragment"
-        android:name="com.m3o.mobile.fragments.services.jokes.JokesFragment"
-        tools:layout="@layout/fragment_service_jokes"
-        android:label="Jokes" />
-
-    <fragment
         android:id="@+id/PasswordsFragment"
         android:name="com.m3o.mobile.fragments.services.passwords.PasswordsFragment"
         tools:layout="@layout/fragment_service_passwords"
