@@ -14,7 +14,10 @@ import com.m3o.mobile.security.tamperdetection.Result
 import com.m3o.mobile.security.tamperdetection.guardDebugger
 import com.m3o.mobile.security.tamperdetection.validateSignature
 import com.m3o.mobile.security.tamperdetection.verifyInstaller
-import com.m3o.mobile.utils.*
+import com.m3o.mobile.utils.logD
+import com.m3o.mobile.utils.logE
+import com.m3o.mobile.utils.openUrl
+import com.m3o.mobile.utils.showDialog
 
 class StartFragment : Fragment() {
     private var _binding: FragmentStartBinding? = null
@@ -74,7 +77,7 @@ class StartFragment : Fragment() {
             "The app version you are using is not downloaded from the Google Play Store.\n\n" +
                     "Uninstall the app from your device and install the app from the Google Play " +
                     "Store.",
-            { openUrl(PLAY_STORE_URL) },
+            { openUrl(getString(R.string.about_play_store_link)) },
             "Download"
         )
     }
@@ -93,7 +96,7 @@ class StartFragment : Fragment() {
             "Insecure App Access",
             "The app version you are using has an invalid signature. Uninstall the app from your " +
                     "device and install the app from the Google Play Store (again).",
-            { openUrl(PLAY_STORE_URL) },
+            { openUrl(getString(R.string.about_play_store_link)) },
             "Download"
         )
     }

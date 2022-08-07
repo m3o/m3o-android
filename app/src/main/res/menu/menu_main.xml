@@ -3,10 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.MainActivity">
 
+<!--    <item-->
+<!--        android:id="@+id/action_settings"-->
+<!--        android:title="Settings"-->
+<!--        android:icon="@drawable/_ic_settings"-->
+<!--        android:orderInCategory="1"-->
+<!--        app:showAsAction="ifRoom" />-->
+
     <item
-        android:id="@+id/action_settings"
-        android:title="Settings"
-        android:orderInCategory="100"
+        android:id="@+id/action_about"
+        android:title="About"
+        android:orderInCategory="2"
         app:showAsAction="never" />
 
 </menu>

@@ -39,3 +39,8 @@
 -keepclasseswithmembers class com.cyb3rko.m3okotlin.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# For AboutIcons
+-keep class **.R$* {
+    <fields>;
+}

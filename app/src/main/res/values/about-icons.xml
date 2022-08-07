@@ -4,7 +4,26 @@
     <string-array name="ic_donation">
         <item>Freepik</item>
         <item>flaticon.com</item>
-        <item>https://www.flaticon.com/premium-icon/charity_3075095?term=donation</item>
+        <item>https://www.flaticon.com/premium-icon/charity_3075095</item>
+    </string-array>
+
+    <string-array name="ic_libraries">
+        <item>Freepik</item>
+        <item>flaticon.com</item>
+        <item>https://www.flaticon.com/free-icon/books-stack-of-three_29302</item>
+    </string-array>
+
+    <string-array name="ic_question">
+        <item>Freepik</item>
+        <item>flaticon.com</item>
+        <item>https://www.flaticon.com/free-icon/information_906794</item>
+    </string-array>
+
+    <string-array name="ic_settings">
+        <item>Freepik</item>
+        <item>flaticon.com</item>
+        <item>https://www.flaticon.com/free-icon/settings_2099058</item>
+        <item>true</item>
     </string-array>
 
 </resources>

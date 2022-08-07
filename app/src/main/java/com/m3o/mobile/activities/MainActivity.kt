@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.ServicesFragment, R.id.AccountFragment)
         )
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         if (!skipRefreshAndClickListener) {
             binding.fab.setOnClickListener {
-                openUrl("https://discord.gg/vhBuhvYJtG")
+                openUrl(getString(R.string.about_discord_link))
             }
 
             if (!intent.getBooleanExtra(SKIP_REFRESH, false)) {
@@ -82,6 +85,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    internal fun hideFab() {
+        binding.fab.visibility = View.GONE
+    }
+
+    internal fun showFab() {
+        binding.fab.visibility = View.VISIBLE
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -93,7 +104,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_about -> {
+                navController.navigate(R.id.AboutFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

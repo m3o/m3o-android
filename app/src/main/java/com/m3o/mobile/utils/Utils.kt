@@ -34,8 +34,6 @@ internal const val SHARED_PREFERENCE = "Safe"
 internal const val SKIP_REFRESH = "skip_refresh"
 internal const val USER_ID = "user_id"
 
-internal const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.m3o.mobile"
-
 // For different classes
 
 internal fun TextInputEditText.toTrimmedString() = this.editableText.toString().trim()

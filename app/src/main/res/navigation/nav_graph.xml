@@ -18,6 +18,21 @@
         android:label="Your Account" />
 
     <fragment
+        android:id="@+id/AboutFragment"
+        android:name="com.m3o.mobile.fragments.about.AboutFragment"
+        android:label="@string/navigation_label_about" />
+
+    <fragment
+        android:id="@+id/AboutIconsFragment"
+        android:name="com.m3o.mobile.fragments.about.AboutIconsFragment"
+        android:label="@string/navigation_label_about_icons" />
+
+    <fragment
+        android:id="@+id/AboutAnimationsFragment"
+        android:name="com.m3o.mobile.fragments.about.AboutAnimationsFragment"
+        android:label="@string/navigation_label_about_animations" />
+
+    <fragment
         android:id="@+id/AvatarFragment"
         android:name="com.m3o.mobile.fragments.services.avatar.AvatarFragment"
         tools:layout="@layout/fragment_service_avatar"

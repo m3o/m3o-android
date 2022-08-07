@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_label_about">About</string>
+    <string name="navigation_label_about_icons">Used Icons</string>
+    <string name="navigation_label_about_animations">Used Animations</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_element_version">Version %1$s (%2$d) — Changelog</string>
+    <string name="about_releases_link" translatable="false">https://github.com/m3o/m3o-android/releases</string>
+    <string name="about_description">The community based super app built for developers</string>
+    <string name="about_group_attribution">Attribution</string>
+    <string name="about_element_libraries">Used Libraries</string>
+    <string name="about_element_icons">Used Icons</string>
+    <string name="about_element_animations">Used Animations</string>
+    <string name="about_animations_description">%1$s animation by %2$s</string>
+    <string name="about_group_links">Links</string>
+    <string name="about_element_feedback_text">Visit and give feedback on GitHub</string>
+    <string name="about_element_website">Visit the M3O website</string>
+    <string name="about_website_link" translatable="false">https://m3o.com</string>
+    <string name="about_element_discord">Join our Discord community</string>
+    <string name="about_discord_link" translatable="false">https://discord.gg/vhBuhvYJtG</string>
+    <string name="about_element_twitter">Follow us on Twitter</string>
+    <string name="about_twitter_link" translatable="false">https://twitter.com/m3oservices</string>
+    <string name="about_element_instagram">Follow us on Instagram</string>
+    <string name="about_instagram_link" translatable="false">https://www.instagram.com/m3oservices</string>
+    <string name="about_element_github">Visit this project on GitHub</string>
+    <string name="about_github_link" translatable="false">https://github.com/m3o/m3o-android</string>
+    <string name="about_element_playstore">Visit on Google Play Store</string>
+    <string name="about_play_store_link" translatable="false">https://play.google.com/store/apps/details?id=com.m3o.mobile</string>
+</resources>
